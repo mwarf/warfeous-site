@@ -47,6 +47,27 @@ const { images } = Astro.props;
   let currentIdx = 0;
   const total = images.length;
 
+  function getFocusable() {
+    const els = [lbClose];
+    if (lbPrev.style.display !== 'none') els.push(lbPrev);
+    if (lbNext.style.display !== 'none') els.push(lbNext);
+    return els;
+  }
+
+  function trapFocus(e) {
+    if (lightbox.style.display === 'none') return;
+    const focusable = getFocusable();
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+  }
+
   function show(idx) {
     currentIdx = idx;
     const f = images[idx];
@@ -57,11 +78,14 @@ const { images } = Astro.props;
     lbNext.style.display = idx < total - 1 ? '' : 'none';
     lightbox.style.display = '';
     document.body.style.overflow = 'hidden';
+    lbClose.focus();
   }
 
   function close() {
     lightbox.style.display = 'none';
     document.body.style.overflow = '';
+    const trigger = document.querySelector('[data-lightbox-index="' + currentIdx + '"]');
+    if (trigger) trigger.focus();
   }
 
   document.querySelectorAll('[data-lightbox-index]').forEach(btn => {
@@ -83,5 +107,6 @@ const { images } = Astro.props;
     if (e.key === 'Escape') close();
     else if (e.key === 'ArrowLeft') show(Math.max(currentIdx - 1, 0));
     else if (e.key === 'ArrowRight') show(Math.min(currentIdx + 1, total - 1));
+    else trapFocus(e);
   });
 </script>

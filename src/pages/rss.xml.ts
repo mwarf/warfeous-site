@@ -16,6 +16,7 @@ export async function GET(context: APIContext) {
       description: entry.data.excerpt || '',
       link: `/journal/${entry.id}`,
       categories: entry.data.tags,
+      content: entry.body || entry.data.excerpt || '',
     })),
     customData: '<language>en-ca</language>',
   });

@@ -22,3 +22,19 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# raw / design files — never belong in a web repo
+*.tiff
+*.tif
+*.bmp
+*.psd
+*.ai
+*.indd
+*.cr2
+*.nef
+*.dng
+*.heic
+
+# editorial images live on Cloudflare Images (referenced by ID in frontmatter).
+# small UI/OG images are fine in src/assets/ or public/ — just keep them web-ready.
+src/content/**/raw/

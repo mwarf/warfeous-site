@@ -38,3 +38,8 @@ export function formatDate(date: Date): string {
   const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   return `${date.getDate()} ${MONTHS[date.getMonth()].slice(0, 3)} ${date.getFullYear()}`;
 }
+
+export function readingTime(body: string): number {
+  const words = body.split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 200));
+}

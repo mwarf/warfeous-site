@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob, file } from 'astro/loaders';
 
@@ -13,8 +13,9 @@ const journal = defineCollection({
     tags: z.array(z.string()).default([]),
     hero: z.object({ src: z.string(), alt: z.string(), caption: z.string().optional() }).optional(),
     video: z.object({ streamId: z.string(), poster: z.string(), caption: z.string().optional() }).optional(),
-    gallery: z.string().optional(),
+    gallery: reference('galleries').optional(),
     draft: z.boolean().default(false),
+    dropcap: z.boolean().default(true),
     canonicalUrl: z.string().url().optional(),
     location: z.string().optional(),
   }),

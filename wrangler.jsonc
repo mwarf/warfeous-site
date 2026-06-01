@@ -1,0 +1,15 @@
+{
+	"name": "warfeous-site",
+	"compatibility_date": "2026-05-31",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./dist/client"
+	},
+	"observability": {
+		"enabled": true
+	}
+}

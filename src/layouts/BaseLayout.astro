@@ -1,4 +1,6 @@
 ---
+import { ClientRouter } from 'astro:transitions';
+
 interface Props {
   title: string;
   description?: string;
@@ -29,6 +31,7 @@ const canonical = canonicalUrl || Astro.url.href;
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="generator" content={Astro.generator} />
   <title>{siteTitle}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
@@ -50,6 +53,7 @@ const canonical = canonicalUrl || Astro.url.href;
 
   <link rel="alternate" type="application/rss+xml" title="warfeous" href="/rss.xml" />
   {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
+  <ClientRouter />
 </head>
 <body>
   <a class="w-skiplink" href="#main">Skip to content</a>
@@ -63,7 +67,7 @@ const canonical = canonicalUrl || Astro.url.href;
     <slot name="footer" />
   </div>
   <script>
-    (function() {
+    document.addEventListener('astro:page-load', () => {
       try {
         var read = JSON.parse(localStorage.getItem('warfeous:read') || '[]');
         document.querySelectorAll('[data-slug]').forEach(function(el) {
@@ -72,7 +76,19 @@ const canonical = canonicalUrl || Astro.url.href;
           }
         });
       } catch(e) {}
-    })();
+
+      const slug = window.location.pathname.split('/').filter(Boolean).pop();
+      const isJournal = window.location.pathname.startsWith('/journal/');
+      if (isJournal && slug) {
+        try {
+          const list = JSON.parse(localStorage.getItem('warfeous:read') || '[]');
+          if (!list.includes(slug)) {
+            list.push(slug);
+            localStorage.setItem('warfeous:read', JSON.stringify(list));
+          }
+        } catch(e) {}
+      }
+    });
   </script>
 </body>
 </html>

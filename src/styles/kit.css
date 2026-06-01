@@ -133,12 +133,15 @@ html, body { margin: 0; padding: 0; background: var(--w-bg); }
 .w-meta strong { color: var(--w-ink); font-weight: 500; }
 .w-meta__sep { color: var(--w-sage); padding: 0 4px; }
 .w-meta__readdot {
-  display: inline-block;
+  display: none;
   width: 5px;
   height: 5px;
   background: var(--w-sage);
   vertical-align: 2px;
   margin-right: 10px;
+}
+.is-read .w-meta__readdot {
+  display: inline-block;
 }
 
 .w-row {
@@ -355,12 +358,35 @@ html, body { margin: 0; padding: 0; background: var(--w-bg); }
   letter-spacing: -0.04em;
 }
 
+.w-article--essay.w-article--no-dropcap > p:first-of-type::first-letter {
+  all: unset;
+}
+
 .w-article--pe {
   max-width: 1080px;
 }
 
 .w-article--pe .w-gallery {
   margin: 36px 0;
+}
+
+.w-article .w-pullquote {
+  font-family: var(--w-font-display);
+  font-size: clamp(26px, 1.8vw + 20px, 36px);
+  font-style: italic;
+  line-height: 1.18;
+  letter-spacing: -.018em;
+  font-variation-settings: "opsz" 144, "wght" 420, "SOFT" 50;
+  color: var(--w-ink-soft);
+  text-align: center;
+  max-width: 36ch;
+  margin: var(--w-space-9) auto;
+  padding: var(--w-space-7) 0;
+  border-top: var(--w-border);
+  border-bottom: var(--w-border);
+  border-left: 0;
+  padding-left: 0;
+  text-wrap: balance;
 }
 
 .w-article blockquote {

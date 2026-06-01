@@ -6,9 +6,9 @@ import EntryMeta from '../../components/EntryMeta.astro';
 import HeroImage from '../../components/HeroImage.astro';
 import PrevNext from '../../components/PrevNext.astro';
 import ShareRow from '../../components/ShareRow.astro';
-import StreamVideo from '../../components/StreamVideo.astro';
-import { getCollection, render } from 'astro:content';
-import { formatDate } from '../../lib/utils';
+import Gallery from '../../components/Gallery.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+import { formatDate, readingTime } from '../../lib/utils';
 
 export async function getStaticPaths() {
   const entries = await getCollection('journal', ({ data }) => !data.draft);
@@ -27,15 +27,15 @@ export async function getStaticPaths() {
 const { entry, prev, next } = Astro.props;
 const { Content } = await render(entry);
 const slug = entry.id;
-const { title, type, publishedAt, location, excerpt, hero, gallery } = entry.data;
+const { title, type, publishedAt, location, excerpt, hero, gallery, dropcap } = entry.data;
 const isNote = type === 'note';
 const isPhotoEssay = type === 'photo-essay';
 const isEssay = type === 'essay';
+const noDropcap = isEssay && dropcap === false;
 
 let galleryImages: { tone: string; cap: string }[] = [];
 if (isPhotoEssay && gallery) {
-  const galleries = await getCollection('galleries');
-  const galleryEntry = galleries.find(g => g.id === gallery);
+  const galleryEntry = await getEntry('galleries', gallery.id);
   if (galleryEntry) {
     galleryImages = galleryEntry.data.images.map(img => ({
       tone: 'glacier',
@@ -43,6 +43,8 @@ if (isPhotoEssay && gallery) {
     }));
   }
 }
+
+const mins = readingTime(entry.body || '');
 
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
@@ -71,12 +73,13 @@ const jsonLd = JSON.stringify({
   <Masthead slot="masthead" route={`/journal/${entry.id}`} />
   <Footer slot="footer" />
 
-  <article class:list={['w-article', 'w-page', { 'w-article--essay': isEssay, 'w-article--note': isNote, 'w-article--pe': isPhotoEssay }]} data-type={type} style={`max-width: ${isNote ? '620px' : isPhotoEssay ? '1080px' : '760px'}`}>
+  <article class:list={['w-article', 'w-page', { 'w-article--essay': isEssay, 'w-article--note': isNote, 'w-article--pe': isPhotoEssay, 'w-article--no-dropcap': noDropcap }]} data-type={type} style={`max-width: ${isNote ? '620px' : isPhotoEssay ? '1080px' : '760px'}`}>
     <header>
       <EntryMeta
         type={type}
         publishedAt={publishedAt}
         location={location}
+        readingMins={mins}
         slug={entry.id}
       />
       <h1 style={{ marginTop: 16 }}>{title}</h1>
@@ -90,7 +93,7 @@ const jsonLd = JSON.stringify({
     )}
 
     {isPhotoEssay && galleryImages.length > 0 && (
-      <StreamVideo images={galleryImages} />
+      <Gallery images={galleryImages} />
     )}
 
     <Content />
@@ -99,18 +102,4 @@ const jsonLd = JSON.stringify({
 
     {!isPhotoEssay && <ShareRow />}
   </article>
-
-  <script>
-    (function() {
-      const slug = window.location.pathname.split('/').filter(Boolean).pop();
-      if (!slug) return;
-      try {
-        const list = JSON.parse(localStorage.getItem('warfeous:read') || '[]');
-        if (!list.includes(slug)) {
-          list.push(slug);
-          localStorage.setItem('warfeous:read', JSON.stringify(list));
-        }
-      } catch(e) {}
-    })();
-  </script>
 </BaseLayout>
