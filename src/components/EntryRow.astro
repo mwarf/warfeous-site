@@ -1,0 +1,21 @@
+---
+import EntryMeta from './EntryMeta.astro';
+
+interface Props {
+  slug: string;
+  title: string;
+  type: string;
+  publishedAt: Date;
+  excerpt?: string;
+  location?: string;
+}
+
+const { slug, title, type, publishedAt, excerpt, location } = Astro.props;
+---
+<a href={`/journal/${slug}`} class="w-row">
+  <EntryMeta type={type} publishedAt={publishedAt} location={location} slug={slug} />
+  <div>
+    <p class="w-row__title">{title}</p>
+    {excerpt && <p class="w-row__excerpt">{excerpt}</p>}
+  </div>
+</a>

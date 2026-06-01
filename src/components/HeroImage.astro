@@ -1,0 +1,17 @@
+---
+import { TONES } from '../lib/utils';
+
+interface Props {
+  tone?: string;
+  caption?: string;
+  bleed?: boolean;
+}
+
+const { tone = 'glacier', caption, bleed = false } = Astro.props;
+---
+<figure class:list={['w-hero', { 'w-hero--bleed': bleed }]}>
+  <div class="w-hero__img" style={`background: ${TONES[tone]}`}>
+    <div class="w-hero__grain"></div>
+  </div>
+  {caption && <figcaption class="w-hero__caption">{caption}</figcaption>}
+</figure>

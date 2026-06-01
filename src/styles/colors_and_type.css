@@ -1,0 +1,589 @@
+/* ============================================================
+   Warfeous — colors_and_type.css
+   Editorial-modern journal. Type-led, restrained, durable.
+   ============================================================ */
+
+/* --- Webfonts -------------------------------------------------
+   All three families are self-hosted from /fonts (WOFF2).
+   - Fraunces: variable (roman + italic), SOFT+WONK+opsz+wght.
+   - Newsreader: variable (roman + italic), opsz+wght.
+   - iA Writer Mono S: static 400/700, roman + italic.
+-------------------------------------------------------------- */
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/Fraunces-Italic-VariableFont_SOFT_WONK_opsz_wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Newsreader";
+  src: url("/fonts/Newsreader-VariableFont_opsz_wght.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Newsreader";
+  src: url("/fonts/Newsreader-Italic-VariableFont_opsz_wght.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "iA Writer Mono S";
+  src: url("/fonts/ia-writer-mono-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "iA Writer Mono S";
+  src: url("/fonts/ia-writer-mono-latin-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "iA Writer Mono S";
+  src: url("/fonts/ia-writer-mono-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "iA Writer Mono S";
+  src: url("/fonts/ia-writer-mono-latin-700-italic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  /* ---------- Palette · Winter Coulee --------------------- */
+  --w-frost:            #EAE6D5;
+  --w-frost-deep:       #DAD4BD;
+  --w-rule:             #BFB89E;
+  --w-ink:              #1B201F;
+  --w-ink-soft:         #2A2F2D;
+  --w-sage:             #6B7268;
+  --w-sage-soft:        #8E948A;
+  --w-slate:            #3F5D6B;
+  --w-slate-hover:      #2C4753;
+
+  --w-parchment:        var(--w-frost);
+  --w-parchment-deep:   var(--w-frost-deep);
+  --w-muted:            var(--w-sage);
+  --w-muted-soft:       var(--w-sage-soft);
+  --w-oxblood:          var(--w-slate);
+  --w-oxblood-hover:    var(--w-slate-hover);
+
+  --w-bg:               var(--w-frost);
+  --w-bg-alt:           var(--w-frost-deep);
+  --w-fg:               var(--w-ink);
+  --w-fg-muted:         var(--w-sage);
+  --w-fg-faint:         var(--w-sage-soft);
+  --w-accent:           var(--w-slate);
+  --w-accent-hover:     var(--w-slate-hover);
+  --w-divider:          var(--w-rule);
+
+  --w-font-display:     "Fraunces", "Times New Roman", Georgia, serif;
+  --w-font-body:        "Newsreader", Georgia, "Times New Roman", serif;
+  --w-font-mono:        "iA Writer Mono S", "SFMono-Regular", "Menlo", monospace;
+
+  --w-fs-meta:          clamp(13px, 0.78vw + 11px, 14px);
+  --w-fs-body:          clamp(17px, 0.4vw + 16px, 19px);
+  --w-fs-lead:          clamp(19px, 0.7vw + 17px, 22px);
+  --w-fs-h3:            clamp(19px, 0.6vw + 17px, 22px);
+  --w-fs-h2:            clamp(24px, 1.2vw + 20px, 32px);
+  --w-fs-h1:            clamp(36px, 4vw + 16px, 56px);
+  --w-fs-display:       clamp(48px, 6vw + 20px, 88px);
+
+  --w-lh-tight:         0.95;
+  --w-lh-snug:          1.12;
+  --w-lh-body:          1.55;
+  --w-measure:          66ch;
+  --w-measure-narrow:   52ch;
+
+  --w-space-1:          4px;
+  --w-space-2:          8px;
+  --w-space-3:          12px;
+  --w-space-4:          16px;
+  --w-space-5:          24px;
+  --w-space-6:          32px;
+  --w-space-7:          48px;
+  --w-space-8:          64px;
+  --w-space-9:          96px;
+  --w-space-10:         128px;
+
+  --w-border:           1px solid var(--w-divider);
+  --w-border-strong:    1px solid var(--w-ink);
+  --w-radius-0:         0px;
+  --w-radius-1:         2px;
+  --w-radius-2:         4px;
+  --w-shadow-none:      none;
+
+  --w-ease:             cubic-bezier(.4, 0, .2, 1);
+  --w-dur-fast:         120ms;
+  --w-dur-slow:         220ms;
+}
+
+/* ============================================================
+   Element baselines
+   ============================================================ */
+html, body {
+  background: var(--w-bg);
+  color: var(--w-fg);
+  font-family: var(--w-font-body);
+  font-size: var(--w-fs-body);
+  line-height: var(--w-lh-body);
+  font-feature-settings: "kern", "liga", "calt", "onum";
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+p {
+  max-width: var(--w-measure);
+  margin: 0 0 1em;
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+.w-lead {
+  font-family: var(--w-font-body);
+  font-size: var(--w-fs-lead);
+  font-weight: 400;
+  font-variation-settings: "opsz" 36, "wght" 380;
+  line-height: 1.38;
+  letter-spacing: -0.005em;
+  color: var(--w-ink-soft);
+  max-width: var(--w-measure);
+  text-wrap: pretty;
+}
+
+h1, .w-h1 {
+  font-family: var(--w-font-display);
+  font-size: var(--w-fs-h1);
+  font-weight: 400;
+  line-height: var(--w-lh-tight);
+  letter-spacing: -0.032em;
+  font-variation-settings: "opsz" 144, "wght" 420, "SOFT" 50;
+  color: var(--w-ink-soft);
+  margin: 0 0 0.35em;
+  text-wrap: balance;
+}
+
+h2, .w-h2 {
+  font-family: var(--w-font-display);
+  font-size: var(--w-fs-h2);
+  font-weight: 500;
+  line-height: var(--w-lh-snug);
+  letter-spacing: -0.022em;
+  font-variation-settings: "opsz" 60, "wght" 500;
+  color: var(--w-ink-soft);
+  margin: 1.6em 0 0.35em;
+  text-wrap: balance;
+}
+
+h3, .w-h3 {
+  font-family: var(--w-font-body);
+  font-size: var(--w-fs-h3);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.005em;
+  color: var(--w-ink);
+  margin: 1.6em 0 0.3em;
+}
+
+.w-display {
+  font-family: var(--w-font-display);
+  font-size: var(--w-fs-display);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.042em;
+  font-variation-settings: "opsz" 144, "wght" 280, "SOFT" 100;
+  color: var(--w-ink-soft);
+  text-wrap: balance;
+}
+
+.w-wordmark {
+  font-family: var(--w-font-display);
+  font-weight: 400;
+  letter-spacing: -0.038em;
+  font-variation-settings: "opsz" 144, "wght" 380, "SOFT" 100;
+  text-transform: lowercase;
+  color: var(--w-ink-soft);
+  line-height: 0.9;
+}
+
+.w-meta,
+time, small {
+  font-family: var(--w-font-mono);
+  font-size: var(--w-fs-meta);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--w-muted);
+  font-feature-settings: "tnum", "lnum";
+}
+
+.w-caption {
+  font-family: var(--w-font-mono);
+  font-size: var(--w-fs-meta);
+  letter-spacing: 0.015em;
+  color: var(--w-muted);
+  line-height: 1.45;
+  text-transform: none;
+}
+
+blockquote, .w-pullquote {
+  font-family: var(--w-font-display);
+  font-size: clamp(22px, 1.4vw + 18px, 32px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  font-variation-settings: "opsz" 60, "wght" 400;
+  color: var(--w-ink-soft);
+  border-left: var(--w-border-strong);
+  padding-left: var(--w-space-5);
+  margin: var(--w-space-6) 0;
+  max-width: var(--w-measure-narrow);
+  text-wrap: balance;
+}
+
+a {
+  color: var(--w-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  text-underline-offset: 0.18em;
+  transition: color var(--w-dur-fast) var(--w-ease), border-color var(--w-dur-fast) var(--w-ease);
+}
+a:hover { color: var(--w-accent-hover); border-bottom-color: transparent; }
+
+hr, .w-rule {
+  border: 0;
+  border-top: var(--w-border);
+  margin: var(--w-space-6) 0;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--w-font-mono);
+  font-size: 0.92em;
+  color: var(--w-ink);
+}
+
+::selection {
+  background: var(--w-oxblood);
+  color: var(--w-parchment);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   Long-form elements
+   ============================================================ */
+
+ul, ol {
+  max-width: var(--w-measure);
+  margin: 0 0 1em;
+  padding: 0 0 0 1.4em;
+  line-height: var(--w-lh-body);
+}
+ul li, ol li { margin: 0.25em 0; }
+
+ul {
+  list-style: "—  ";
+  list-style-position: outside;
+  padding-left: 1.4em;
+}
+ul li {
+  padding-left: 0.4em;
+}
+ul ::marker {
+  color: var(--w-accent);
+  font-family: var(--w-font-mono);
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+ol {
+  list-style: none;
+  counter-reset: ol;
+}
+ol li {
+  counter-increment: ol;
+  position: relative;
+  padding-left: 2em;
+}
+ol li::before {
+  content: counter(ol);
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  font-family: var(--w-font-mono);
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  color: var(--w-muted);
+  font-feature-settings: "tnum", "lnum";
+  font-variant-numeric: tabular-nums;
+}
+
+ul ul, ol ol, ul ol, ol ul {
+  margin: 0.25em 0 0.5em;
+  padding-left: 0;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: minmax(8em, 14em) 1fr;
+  gap: 0.6em 2em;
+  max-width: var(--w-measure);
+  margin: 0 0 1.6em;
+}
+dt {
+  font-family: var(--w-font-mono);
+  font-size: 0.85em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--w-muted);
+  font-feature-settings: "tnum", "lnum";
+  padding-top: 0.18em;
+}
+dd {
+  margin: 0;
+  color: var(--w-ink);
+}
+
+table {
+  width: 100%;
+  max-width: var(--w-measure);
+  border-collapse: collapse;
+  margin: var(--w-space-5) 0;
+  font-feature-settings: "tnum", "lnum";
+}
+thead th {
+  font-family: var(--w-font-mono);
+  font-size: var(--w-fs-meta);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--w-muted);
+  text-align: left;
+  border-bottom: 1px solid var(--w-ink);
+  padding: 0.5em 1em 0.5em 0;
+}
+tbody td {
+  font-family: var(--w-font-body);
+  font-size: 0.94em;
+  color: var(--w-ink);
+  border-bottom: 1px solid var(--w-rule);
+  padding: 0.7em 1em 0.7em 0;
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: 0; }
+table caption {
+  font-family: var(--w-font-mono);
+  font-size: var(--w-fs-meta);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--w-muted);
+  text-align: left;
+  padding-bottom: 0.6em;
+  caption-side: top;
+}
+
+figure {
+  margin: var(--w-space-6) 0;
+}
+figure.w-inline {
+  max-width: var(--w-measure);
+}
+figure.w-bleed {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  width: 100vw;
+  max-width: none;
+}
+figure img,
+figure video {
+  width: 100%;
+  display: block;
+}
+figcaption {
+  font-family: var(--w-font-mono);
+  font-size: var(--w-fs-meta);
+  letter-spacing: 0.015em;
+  color: var(--w-muted);
+  line-height: 1.45;
+  margin-top: 0.6em;
+  max-width: 56ch;
+}
+figure.w-bleed figcaption {
+  max-width: 56ch;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 var(--w-space-5);
+  margin-top: 0.7em;
+}
+
+/* --- Footnotes (MDX-friendly) ------------------------------- */
+sup, .w-fnref {
+  font-family: var(--w-font-mono);
+  font-size: 0.7em;
+  vertical-align: super;
+  line-height: 0;
+  font-feature-settings: "tnum", "lnum";
+}
+sup a, .w-fnref a {
+  color: var(--w-accent);
+  border-bottom: 0;
+  padding: 0 0.15em;
+  letter-spacing: 0.02em;
+}
+sup a:hover, .w-fnref a:hover { color: var(--w-accent-hover); }
+
+.w-footnotes {
+  border-top: 1px solid var(--w-rule);
+  margin-top: var(--w-space-7);
+  padding-top: var(--w-space-5);
+  font-family: var(--w-font-body);
+  font-size: 0.88em;
+  line-height: 1.5;
+  color: var(--w-fg-muted);
+  counter-reset: fn;
+}
+.w-footnotes::before {
+  content: "Notes";
+  display: block;
+  font-family: var(--w-font-mono);
+  font-size: var(--w-fs-meta);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--w-muted);
+  margin-bottom: var(--w-space-3);
+}
+.w-footnotes ol {
+  padding-left: 0;
+  margin: 0;
+}
+.w-footnotes ol li {
+  counter-increment: fn;
+  padding-left: 2.2em;
+  margin: 0.5em 0;
+}
+.w-footnotes ol li::before {
+  content: counter(fn);
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  font-family: var(--w-font-mono);
+  font-size: 0.9em;
+  color: var(--w-accent);
+  font-variant-numeric: tabular-nums;
+}
+.w-footnotes a.w-fnback {
+  color: var(--w-muted);
+  border-bottom: 0;
+  padding-left: 0.4em;
+  font-family: var(--w-font-mono);
+  font-size: 0.85em;
+}
+.w-footnotes a.w-fnback:hover { color: var(--w-accent); }
+
+/* --- Drop cap --- */
+.w-dropcap::first-letter {
+  font-family: var(--w-font-display);
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "wght" 380, "SOFT" 100;
+  font-size: 4.6em;
+  line-height: 0.85;
+  float: left;
+  margin: 0.05em 0.1em 0 -0.04em;
+  color: var(--w-ink-soft);
+  letter-spacing: -0.04em;
+}
+
+/* --- Inline aside / margin note --- */
+.w-aside {
+  border-left: 1px solid var(--w-rule);
+  padding: 0.2em 0 0.2em var(--w-space-4);
+  margin: var(--w-space-5) 0;
+  font-family: var(--w-font-body);
+  font-size: 0.92em;
+  color: var(--w-fg-muted);
+  line-height: 1.55;
+  max-width: var(--w-measure-narrow);
+}
+
+/* ============================================================
+   Accessibility — focus, skip link
+   ============================================================ */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--w-accent);
+  outline-offset: 3px;
+  border-radius: 0;
+}
+a:focus-visible {
+  outline: 2px solid var(--w-accent);
+  outline-offset: 4px;
+}
+
+.w-skiplink {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--w-ink);
+  color: var(--w-bg);
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 12px 18px;
+  text-decoration: none;
+  border: 0;
+  z-index: 100;
+  transform: translateY(-200%);
+  transition: transform 120ms var(--w-ease);
+}
+.w-skiplink:focus,
+.w-skiplink:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--w-accent);
+  outline-offset: 0;
+}
+
+/* ============================================================
+   Print
+   ============================================================ */
+@media print {
+  :root {
+    --w-bg: #ffffff;
+    --w-fg: #000000;
+    --w-fg-muted: #555;
+    --w-rule: #ccc;
+    --w-accent: #000;
+  }
+  body { font-size: 12pt; line-height: 1.45; }
+  a { color: #000; border-bottom-color: #999; }
+  .w-mast__nav, .w-foot__links, .w-skiplink, .w-pn { display: none; }
+  h1, h2, h3 { page-break-after: avoid; }
+  figure, blockquote, table { page-break-inside: avoid; }
+  .w-footnotes { page-break-before: avoid; }
+}

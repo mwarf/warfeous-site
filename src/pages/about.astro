@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
+import { TONES } from '../lib/utils';
+---
+<BaseLayout title="About">
+  <Masthead slot="masthead" route="/about" />
+  <Footer slot="footer" />
+
+  <div class="w-page" style="max-width: 680px;">
+    <p class="w-eyebrow">About</p>
+    <h1 style={{
+      fontFamily: 'var(--w-font-display)',
+      fontSize: 'clamp(40px, 4vw + 16px, 60px)',
+      fontWeight: 400,
+      letterSpacing: '-0.034em',
+      color: 'var(--w-ink-soft)',
+      margin: '0 0 32px',
+      fontVariationSettings: '"opsz" 144, "wght" 420, "SOFT" 50',
+      lineHeight: 0.95,
+    }}>Michael Warf</h1>
+
+    <p style={{
+      fontFamily: 'var(--w-font-body)',
+      fontSize: '22px',
+      fontVariationSettings: '"opsz" 36, "wght" 380',
+      lineHeight: 1.42,
+      letterSpacing: '-0.005em',
+      color: 'var(--w-ink-soft)',
+      margin: '0 0 36px',
+      maxWidth: '52ch',
+      textWrap: 'pretty',
+    }}>
+      Documentary filmmaker and photographer based in Pincher Creek, on Treaty 7 territory in Southern Alberta, within a half-day's drive of the Crowsnest Pass.
+    </p>
+
+    <figure style="margin: 0 0 24px; float: right; width: 42%; margin-left: 32px;">
+      <div style={`aspect-ratio: 4/5; background: ${TONES.warm}; position: relative; overflow: hidden;`}>
+        <div class="w-hero__grain"></div>
+      </div>
+      <figcaption style="font-family: var(--w-font-mono); font-size: 12px; letter-spacing: .015em; color: var(--w-muted); margin-top: 10px; line-height: 1.45;">
+        Pincher Creek, March 2026. Self-portrait on the ranch road.
+      </figcaption>
+    </figure>
+
+    <p>
+      I make non-fiction work for clients in agriculture, conservation, and regional tourism. The studio is <a href="https://coalbanks.com">Coalbanks Creative</a>. The journal is where the unfinished thinking lives: notes from the cut, photo essays from the field, longer pieces when something earns the length.
+    </p>
+    <p>
+      This is not a CV. For project work, the studio site is the right address. For anything else, the email at the bottom of every page is the right address.
+    </p>
+
+    <div style="clear: both;"></div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
+---
+<BaseLayout title="404 · Page not found">
+  <Masthead slot="masthead" route="/404" />
+  <Footer slot="footer" />
+
+  <div class="w-page" style="max-width: 620px; padding-top: 64px;">
+    <p class="w-eyebrow">404 · page not found</p>
+    <h1 style={{
+      fontFamily: 'var(--w-font-display)',
+      fontSize: 'clamp(64px, 8vw + 16px, 120px)',
+      fontWeight: 300,
+      letterSpacing: '-0.042em',
+      color: 'var(--w-ink-soft)',
+      margin: '0 0 22px',
+      fontVariationSettings: '"opsz" 144, "wght" 320, "SOFT" 50',
+      lineHeight: 0.9,
+    }}>Nothing here.</h1>
+    <p style="font-family: var(--w-font-body); font-size: 19px; line-height: 1.55; color: var(--w-ink); max-width: 50ch;">
+      The page you were after has either moved, never existed, or fell off the edit-room floor.
+    </p>
+    <p style="font-family: var(--w-font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--w-sage); margin-top: 32px;">
+      <a href="/">← Back to the front page</a>
+    </p>
+  </div>
+</BaseLayout>

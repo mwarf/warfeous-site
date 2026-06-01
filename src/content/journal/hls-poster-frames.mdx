@@ -1,0 +1,11 @@
+---
+title: "HLS poster frames have to be hand-picked"
+type: note
+publishedAt: 2026-05-21
+excerpt: "Cloudflare Stream's auto-poster lands on a black frame, every time."
+tags: [video, cloudflare, workflow]
+---
+
+Reminder to self: HLS poster frames have to be hand-picked. Stream's auto-poster always lands on a black frame at the cut point. The fix is to pull a still at 00:00:02 and upload it as the poster explicitly.
+
+Cost of fixing this after the fact: rebuild the page, rebuild the OG image, re-share the link. Cheaper to do it once on upload.

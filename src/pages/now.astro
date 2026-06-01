@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
+
+const log = [
+  { date: '22 MAY', text: 'Cutting a short doc on a fourth-generation ranch east of Pincher Creek. Three days in the edit suite, eight to go.' },
+  { date: '15 MAY', text: 'Re-grading the Columbia Icefields plates from the May 9 trip. The 24mm Sigma flares harder than I want at f/4.' },
+  { date: '08 MAY', text: 'Reading the new Annie Ernaux translation and the Field Mag back catalogue.' },
+  { date: '01 MAY', text: 'Building this journal in public. Astro, Cloudflare Pages, no CMS. First six entries seeded.' },
+];
+---
+<BaseLayout title="Now">
+  <Masthead slot="masthead" route="/now" />
+  <Footer slot="footer" />
+
+  <div class="w-page" style="max-width: 620px;">
+    <p class="w-eyebrow">Now · updated 22 May 2026</p>
+    <h1 style={{
+      fontFamily: 'var(--w-font-display)',
+      fontSize: 'clamp(40px, 4vw + 16px, 60px)',
+      fontWeight: 400,
+      letterSpacing: '-0.034em',
+      color: 'var(--w-ink-soft)',
+      margin: '0 0 36px',
+      fontVariationSettings: '"opsz" 144, "wght" 420, "SOFT" 50',
+      lineHeight: 0.95,
+    }}>What I'm on this month</h1>
+
+    <dl style="display: grid; grid-template-columns: minmax(5em, 6em) 1fr; gap: 0.8em 1.6em; max-width: 60ch;">
+      {log.map(item => (
+        <>
+          <dt>{item.date}</dt>
+          <dd style="font-family: var(--w-font-body); font-size: 17px; line-height: 1.5;">{item.text}</dd>
+        </>
+      ))}
+    </dl>
+
+    <p style="font-family: var(--w-font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--w-sage); margin-top: 36px; max-width: 60ch;">
+      Following the <a href="https://nownownow.com">nownownow.com</a> convention.
+    </p>
+  </div>
+</BaseLayout>

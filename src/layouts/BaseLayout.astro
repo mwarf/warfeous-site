@@ -1,0 +1,82 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  article?: boolean;
+  wide?: boolean;
+  photo?: boolean;
+  jsonLd?: string;
+}
+
+const {
+  title,
+  description = 'Notes from Southern Alberta. Essays, notes, and photo essays by Michael Warf.',
+  canonicalUrl,
+  ogImage,
+  article = false,
+  wide = false,
+  photo = false,
+  jsonLd,
+} = Astro.props;
+
+const siteTitle = title === 'warfeous' ? title : `${title} — warfeous`;
+const canonical = canonicalUrl || Astro.url.href;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{siteTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preload" href="/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/Newsreader-VariableFont_opsz_wght.woff2" as="font" type="font/woff2" crossorigin />
+
+  <meta property="og:title" content={title} />
+  <meta property="og:site_name" content="warfeous" />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content={article ? 'article' : 'website'} />
+  <meta property="og:url" content={canonical} />
+  {ogImage && <meta property="og:image" content={ogImage} />}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+  <link rel="alternate" type="application/rss+xml" title="warfeous" href="/rss.xml" />
+  {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
+</head>
+<body>
+  <a class="w-skiplink" href="#main">Skip to content</a>
+  <div class:list={['w-page', { 'w-page--wide': wide, 'w-page--photo': photo }]}>
+    <slot name="masthead" />
+  </div>
+  <main id="main">
+    <slot />
+  </main>
+  <div class="w-page">
+    <slot name="footer" />
+  </div>
+  <script>
+    (function() {
+      try {
+        var read = JSON.parse(localStorage.getItem('warfeous:read') || '[]');
+        document.querySelectorAll('[data-slug]').forEach(function(el) {
+          if (read.includes(el.dataset.slug)) {
+            el.classList.add('is-read');
+          }
+        });
+      } catch(e) {}
+    })();
+  </script>
+</body>
+</html>
+<style is:global>
+  @import '../styles/colors_and_type.css';
+  @import '../styles/kit.css';
+</style>

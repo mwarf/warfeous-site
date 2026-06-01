@@ -1,0 +1,29 @@
+{
+  "slug": "columbia-icefields",
+  "title": "A line on the toe",
+  "date": "2026-05-09",
+  "location": "Columbia Icefields",
+  "images": [
+    {
+      "src": "/images/columbia-icefields-01.jpg",
+      "alt": "First light on the toe of the Athabasca Glacier",
+      "caption": "06:14 — first light on the toe of the glacier",
+      "width": 1600,
+      "height": 1067
+    },
+    {
+      "src": "/images/columbia-icefields-02.jpg",
+      "alt": "Moraine at the south flank",
+      "caption": "Moraine at the south flank",
+      "width": 1600,
+      "height": 1067
+    },
+    {
+      "src": "/images/columbia-icefields-03.jpg",
+      "alt": "Snowfield, blue hour, 24mm at f/4",
+      "caption": "Snowfield, blue hour, 24mm at f/4",
+      "width": 1600,
+      "height": 1067
+    }
+  ]
+}

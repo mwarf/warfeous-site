@@ -1,0 +1,87 @@
+---
+import { TONES } from '../lib/utils';
+
+interface Props {
+  images: { tone?: string; cap?: string }[];
+}
+
+const { images } = Astro.props;
+---
+<div class="w-gallery">
+  {images.map((f, i) => (
+    <figure class:list={['w-pe__fig', { full: i % 3 === 1 }]}>
+      <button
+        class="w-pe__photo-btn"
+        data-lightbox-index={i}
+        aria-label={`Open photo ${i + 1} of ${images.length}${f.cap ? ': ' + f.cap : ''}`}
+      >
+        <div class="ph" style={`background: ${TONES[f.tone || 'glacier']}`}>
+          <div class="w-hero__grain"></div>
+        </div>
+      </button>
+      {f.cap && <figcaption class="w-pe__cap">{f.cap}</figcaption>}
+    </figure>
+  ))}
+</div>
+
+<div class="w-lightbox" id="w-lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" style="display:none;">
+  <button class="w-lightbox__close" id="lb-close" aria-label="Close (Esc)">Close</button>
+  <div class="w-lightbox__counter" id="lb-counter"></div>
+  <div class="w-lightbox__stage" id="lb-stage">
+    <div class="w-lightbox__img" id="lb-img"></div>
+    <div class="w-lightbox__cap" id="lb-cap"></div>
+  </div>
+  <button class="w-lightbox__nav prev" id="lb-prev" aria-label="Previous photo (←)">←</button>
+  <button class="w-lightbox__nav next" id="lb-next" aria-label="Next photo (→)">→</button>
+</div>
+
+<script define:vars={{ images, TONES }}>
+  const lightbox = document.getElementById('w-lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbCap = document.getElementById('lb-cap');
+  const lbCounter = document.getElementById('lb-counter');
+  const lbClose = document.getElementById('lb-close');
+  const lbPrev = document.getElementById('lb-prev');
+  const lbNext = document.getElementById('lb-next');
+
+  let currentIdx = 0;
+  const total = images.length;
+
+  function show(idx) {
+    currentIdx = idx;
+    const f = images[idx];
+    lbImg.style.background = TONES[f.tone || 'glacier'];
+    lbCap.textContent = f.cap || '';
+    lbCounter.textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+    lbPrev.style.display = idx > 0 ? '' : 'none';
+    lbNext.style.display = idx < total - 1 ? '' : 'none';
+    lightbox.style.display = '';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    lightbox.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('[data-lightbox-index]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      show(parseInt(btn.dataset.lightboxIndex, 10));
+    });
+  });
+
+  lbClose.addEventListener('click', close);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) close();
+  });
+  document.getElementById('lb-stage').addEventListener('click', (e) => e.stopPropagation());
+  lbPrev.addEventListener('click', (e) => { e.stopPropagation(); show(Math.max(currentIdx - 1, 0)); });
+  lbNext.addEventListener('click', (e) => { e.stopPropagation(); show(Math.min(currentIdx + 1, total - 1)); });
+
+  document.addEventListener('keydown', (e) => {
+    if (lightbox.style.display === 'none') return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') show(Math.max(currentIdx - 1, 0));
+    else if (e.key === 'ArrowRight') show(Math.min(currentIdx + 1, total - 1));
+  });
+</script>

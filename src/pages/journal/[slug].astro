@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Masthead from '../../components/Masthead.astro';
+import Footer from '../../components/Footer.astro';
+import EntryMeta from '../../components/EntryMeta.astro';
+import HeroImage from '../../components/HeroImage.astro';
+import PrevNext from '../../components/PrevNext.astro';
+import ShareRow from '../../components/ShareRow.astro';
+import StreamVideo from '../../components/StreamVideo.astro';
+import { getCollection, render } from 'astro:content';
+import { formatDate } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('journal', ({ data }) => !data.draft);
+  const sorted = entries.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+
+  return sorted.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      prev: i > 0 ? { slug: sorted[i - 1].id, title: sorted[i - 1].data.title } : null,
+      next: i < sorted.length - 1 ? { slug: sorted[i + 1].id, title: sorted[i + 1].data.title } : null,
+    },
+  }));
+}
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await render(entry);
+const slug = entry.id;
+const { title, type, publishedAt, location, excerpt, hero, gallery } = entry.data;
+const isNote = type === 'note';
+const isPhotoEssay = type === 'photo-essay';
+const isEssay = type === 'essay';
+
+let galleryImages: { tone: string; cap: string }[] = [];
+if (isPhotoEssay && gallery) {
+  const galleries = await getCollection('galleries');
+  const galleryEntry = galleries.find(g => g.id === gallery);
+  if (galleryEntry) {
+    galleryImages = galleryEntry.data.images.map(img => ({
+      tone: 'glacier',
+      cap: img.caption || img.alt,
+    }));
+  }
+}
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': isPhotoEssay ? 'ImageGallery' : 'Article',
+  ...(isPhotoEssay
+    ? {
+        name: title,
+        datePublished: publishedAt.toISOString(),
+      }
+    : {
+        headline: title,
+        datePublished: publishedAt.toISOString(),
+        dateModified: (entry.data.updatedAt || publishedAt).toISOString(),
+        author: { '@type': 'Person', name: 'Michael Warf' },
+        description: excerpt || '',
+      }
+  ),
+});
+---
+<BaseLayout
+  title={title}
+  description={excerpt}
+  article
+  jsonLd={jsonLd}
+>
+  <Masthead slot="masthead" route={`/journal/${entry.id}`} />
+  <Footer slot="footer" />
+
+  <article class:list={['w-article', 'w-page', { 'w-article--essay': isEssay, 'w-article--note': isNote, 'w-article--pe': isPhotoEssay }]} data-type={type} style={`max-width: ${isNote ? '620px' : isPhotoEssay ? '1080px' : '760px'}`}>
+    <header>
+      <EntryMeta
+        type={type}
+        publishedAt={publishedAt}
+        location={location}
+        slug={entry.id}
+      />
+      <h1 style={{ marginTop: 16 }}>{title}</h1>
+      {!isNote && excerpt && (
+        <p class="w-article__lead">{excerpt}</p>
+      )}
+    </header>
+
+    {!isNote && !isPhotoEssay && hero && (
+      <HeroImage tone="glacier" caption={`${location || ''}${location ? ' · ' : ''}${formatDate(publishedAt)}`} />
+    )}
+
+    {isPhotoEssay && galleryImages.length > 0 && (
+      <StreamVideo images={galleryImages} />
+    )}
+
+    <Content />
+
+    <PrevNext prev={prev} next={next} />
+
+    {!isPhotoEssay && <ShareRow />}
+  </article>
+
+  <script>
+    (function() {
+      const slug = window.location.pathname.split('/').filter(Boolean).pop();
+      if (!slug) return;
+      try {
+        const list = JSON.parse(localStorage.getItem('warfeous:read') || '[]');
+        if (!list.includes(slug)) {
+          list.push(slug);
+          localStorage.setItem('warfeous:read', JSON.stringify(list));
+        }
+      } catch(e) {}
+    })();
+  </script>
+</BaseLayout>

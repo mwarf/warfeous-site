@@ -1,0 +1,32 @@
+---
+import { TYPE_LABEL, formatDate } from '../lib/utils';
+
+interface Props {
+  type: string;
+  publishedAt: Date;
+  location?: string;
+  readingMins?: number;
+  slug: string;
+}
+
+const { type, publishedAt, location, readingMins, slug } = Astro.props;
+const dateStr = formatDate(publishedAt);
+---
+<div class="w-meta" data-slug={slug}>
+  <span class="w-meta__readdot" aria-hidden="true"></span>
+  <span class="w-meta__part"><strong>{TYPE_LABEL[type] || type}</strong></span>
+  {readingMins && (
+    <>
+      <span class="w-meta__sep" aria-hidden="true"> · </span>
+      <span class="w-meta__part">{readingMins} min</span>
+    </>
+  )}
+  <span class="w-meta__sep" aria-hidden="true"> · </span>
+  <span class="w-meta__part">{dateStr}</span>
+  {location && (
+    <>
+      <span class="w-meta__sep" aria-hidden="true"> · </span>
+      <span class="w-meta__part">{location}</span>
+    </>
+  )}
+</div>

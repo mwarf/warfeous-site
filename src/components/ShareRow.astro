@@ -1,0 +1,44 @@
+---
+---
+<div class="w-share">
+  <button
+    class="w-share__btn"
+    id="share-copy"
+    aria-live="polite"
+  >
+    Copy link
+  </button>
+  <a class="w-share__link" id="share-linkedin" href="#" target="_blank" rel="noopener noreferrer">Share to LinkedIn</a>
+  <a class="w-share__link" id="share-email" href="#">Reply by email</a>
+</div>
+<script>
+  const btn = document.getElementById('share-copy');
+  const li = document.getElementById('share-linkedin');
+  const em = document.getElementById('share-email');
+
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const url = window.location.href;
+      navigator.clipboard?.writeText(url).finally(() => {
+        if (btn.textContent) {
+          const orig = btn.textContent;
+          btn.textContent = 'Copied ✓';
+          btn.classList.add('is-copied');
+          setTimeout(() => {
+            btn.textContent = orig;
+            btn.classList.remove('is-copied');
+          }, 1800);
+        }
+      });
+    });
+  }
+
+  if (li) {
+    li.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
+  }
+
+  if (em) {
+    const title = document.title;
+    em.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(window.location.href)}`;
+  }
+</script>

@@ -1,0 +1,738 @@
+/* ============================================================
+   Warfeous UI Kit — local styles
+   Pulls from project-root colors_and_type.css.
+   Adds layout chrome for the click-through site.
+   ============================================================ */
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; background: var(--w-bg); }
+
+#app { min-height: 100vh; }
+
+.w-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.w-page--wide { max-width: 1080px; }
+.w-page--photo { max-width: 1200px; }
+
+/* --- Masthead --- */
+.w-mast {
+  padding: 36px 0 24px;
+  border-bottom: 1px solid var(--w-rule);
+  margin-bottom: 48px;
+}
+.w-mast__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.w-mast__wm {
+  font-family: var(--w-font-display);
+  font-size: clamp(36px, 4vw + 16px, 56px);
+  font-weight: 400;
+  letter-spacing: -0.038em;
+  font-variation-settings: "opsz" 144, "wght" 380, "SOFT" 100;
+  color: var(--w-ink-soft);
+  line-height: 0.9;
+  text-decoration: none;
+  border: 0;
+}
+.w-mast__nav {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+.w-mast__nav a {
+  font-family: var(--w-font-body);
+  font-size: 16px;
+  color: var(--w-ink);
+  border: 0;
+  text-decoration: none;
+  position: relative;
+  /* Mobile hit target — 44px min when wrapped */
+  padding: 8px 2px;
+  margin: -8px -2px;
+  transition: color 140ms var(--w-ease);
+}
+.w-mast__nav a::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 5px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 220ms var(--w-ease);
+}
+.w-mast__nav a:hover::after { transform: scaleX(1); }
+.w-mast__nav a.is-active { color: var(--w-slate); }
+.w-mast__nav a.is-active::after { transform: scaleX(1); background: var(--w-slate); }
+.w-mast__tagline {
+  font-family: var(--w-font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--w-muted);
+  margin-top: 14px;
+  font-feature-settings: "tnum", "lnum";
+}
+
+/* --- Footer --- */
+.w-foot {
+  margin-top: 96px;
+  padding: 28px 0 48px;
+  border-top: 1px solid var(--w-rule);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: end;
+}
+.w-foot__bio {
+  font-family: var(--w-font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--w-muted);
+  max-width: 56ch;
+  margin: 0;
+}
+.w-foot__links {
+  display: flex;
+  gap: 18px;
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.w-foot__links a {
+  color: var(--w-muted);
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+.w-foot__links a:hover { color: var(--w-ink); }
+.w-foot__links svg { width: 13px; height: 13px; }
+
+/* --- Entry rows / meta --- */
+.w-meta {
+  font-family: var(--w-font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--w-muted);
+  font-feature-settings: "tnum", "lnum";
+}
+.w-meta strong { color: var(--w-ink); font-weight: 500; }
+.w-meta__sep { color: var(--w-sage); padding: 0 4px; }
+.w-meta__readdot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background: var(--w-sage);
+  vertical-align: 2px;
+  margin-right: 10px;
+}
+
+.w-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 32px;
+  padding: 22px 0;
+  border-top: 1px solid var(--w-rule);
+  align-items: baseline;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 0;
+  position: relative;
+  transition: background 120ms;
+}
+.w-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -14px;
+  width: 2px;
+  height: 100%;
+  background: var(--w-accent);
+  opacity: 0;
+  transition: opacity 140ms var(--w-ease);
+}
+.w-row:hover { background: var(--w-parchment-deep); }
+.w-row:hover::before { opacity: 1; }
+.w-row__title {
+  font-family: var(--w-font-display);
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--w-ink-soft);
+  line-height: 1.1;
+  margin: 0 0 6px;
+  letter-spacing: -.022em;
+  font-variation-settings: "opsz" 60, "wght" 500;
+  text-wrap: balance;
+}
+.w-row__excerpt {
+  font-family: var(--w-font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--w-muted);
+  margin: 0;
+  max-width: 60ch;
+}
+.w-monthhead {
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--w-sage);
+  font-weight: 500;
+  font-feature-settings: "tnum", "lnum";
+  margin: 28px 0 4px;
+  padding-bottom: 2px;
+}
+.w-monthhead:first-of-type { margin-top: 0; }
+
+@media (max-width: 640px) {
+  .w-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+/* --- Photo grid --- */
+.w-pgrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 28px;
+}
+@media (min-width: 800px) {
+  .w-pgrid { grid-template-columns: repeat(3, 1fr); }
+}
+/* The /photographs page uses a 2-col layout at all widths — larger tiles, more whitespace */
+.w-pgrid--photographs {
+  grid-template-columns: 1fr;
+  gap: 56px 40px;
+}
+@media (min-width: 720px) {
+  .w-pgrid--photographs { grid-template-columns: repeat(2, 1fr); }
+}
+.w-tile { text-decoration: none; color: inherit; border: 0; display: block; }
+.w-tile__img {
+  aspect-ratio: 4 / 3;
+  position: relative;
+  overflow: hidden;
+  background: var(--w-parchment-deep);
+}
+.w-tile__grain {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.55) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+  opacity: .12;
+  pointer-events: none;
+}
+.w-tile__caption {
+  margin-top: 10px;
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--w-muted);
+  font-feature-settings: "tnum", "lnum";
+}
+.w-tile__title {
+  font-family: var(--w-font-display);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--w-ink-soft);
+  margin: 2px 0 0;
+  line-height: 1.12;
+  letter-spacing: -.02em;
+  font-variation-settings: "opsz" 60, "wght" 500;
+}
+
+/* --- Hero ---
+   Default: contained within the article column (no margin bleed).
+   Add `.w-hero--bleed` for the rare full-viewport-width treatment. */
+.w-hero {
+  margin: 0 0 36px;
+  position: relative;
+}
+.w-hero--bleed {
+  margin: 0 calc(50% - 50vw) 36px;
+  max-width: 100vw;
+}
+.w-hero__img {
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+}
+.w-hero--bleed .w-hero__img {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.w-hero__grain {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.55) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+  opacity: .10;
+}
+.w-hero__caption {
+  margin: 12px 0 0;
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  letter-spacing: .015em;
+  color: var(--w-muted);
+  line-height: 1.45;
+}
+.w-hero--bleed .w-hero__caption {
+  max-width: 760px;
+  margin: 12px auto 0;
+  padding: 0 24px;
+}
+
+/* --- Article body --- */
+.w-article header { margin-bottom: 36px; }
+.w-article h1 {
+  font-family: var(--w-font-display);
+  font-size: clamp(40px, 4.4vw + 16px, 64px);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -.032em;
+  font-variation-settings: "opsz" 144, "wght" 420, "SOFT" 50;
+  color: var(--w-ink-soft);
+  margin: 0 0 22px;
+  text-wrap: balance;
+}
+.w-article__lead {
+  font-family: var(--w-font-body);
+  font-size: clamp(19px, 0.7vw + 17px, 23px);
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 36, "wght" 380;
+  color: var(--w-ink-soft);
+  margin: 0 0 24px;
+  text-wrap: pretty;
+}
+.w-article p {
+  font-family: var(--w-font-body);
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--w-ink);
+  margin: 0 0 1.15em;
+  max-width: 66ch;
+  text-wrap: pretty;
+}
+.w-article h2 {
+  font-family: var(--w-font-display);
+  font-size: 32px;
+  font-weight: 500;
+  margin: 1.7em 0 .35em;
+  color: var(--w-ink-soft);
+  letter-spacing: -.022em;
+  line-height: 1.1;
+  font-variation-settings: "opsz" 60, "wght" 500;
+  text-wrap: balance;
+}
+
+.w-article--essay > p:first-of-type::first-letter {
+  font-family: var(--w-font-display);
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "wght" 380, "SOFT" 100;
+  font-size: 4.6em;
+  line-height: 0.85;
+  float: left;
+  margin: 0.05em 0.1em 0 -0.04em;
+  color: var(--w-ink-soft);
+  letter-spacing: -0.04em;
+}
+
+.w-article--pe {
+  max-width: 1080px;
+}
+
+.w-article--pe .w-gallery {
+  margin: 36px 0;
+}
+
+.w-article blockquote {
+  font-family: var(--w-font-display);
+  font-size: 28px;
+  font-style: italic;
+  line-height: 1.18;
+  letter-spacing: -.012em;
+  font-variation-settings: "opsz" 60, "wght" 400;
+  color: var(--w-ink-soft);
+  border-left: 1px solid var(--w-ink);
+  padding-left: 24px;
+  margin: 36px 0;
+  max-width: 48ch;
+  text-wrap: balance;
+}
+
+.w-pn {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--w-rule);
+}
+.w-pn__cell { text-decoration: none; color: inherit; border: 0; }
+.w-pn__cell.next { text-align: right; }
+.w-pn__label { font-family: var(--w-font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--w-muted); margin-bottom: 4px; font-feature-settings: "tnum", "lnum"; }
+.w-pn__title { font-family: var(--w-font-display); font-size: 20px; font-weight: 500; color: var(--w-ink-soft); line-height: 1.15; letter-spacing: -.02em; font-variation-settings: "opsz" 60, "wght" 500; }
+
+/* --- Photo essay layout --- */
+.w-pe__fig { margin: 32px 0; }
+.w-pe__fig.full {
+  margin: 48px calc(50% - 50vw);
+  max-width: 100vw;
+}
+.w-pe__fig img, .w-pe__fig .ph {
+  width: 100%;
+  display: block;
+  background: var(--w-parchment-deep);
+  aspect-ratio: 3/2;
+  position: relative;
+  overflow: hidden;
+}
+.w-pe__cap {
+  font-family: var(--w-font-mono);
+  font-size: 13px;
+  letter-spacing: .015em;
+  color: var(--w-muted);
+  margin: 10px auto 0;
+  max-width: 60ch;
+  padding: 0 24px;
+  line-height: 1.45;
+}
+
+/* --- Generic --- */
+.w-eyebrow {
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--w-muted);
+  margin-bottom: 16px;
+  font-feature-settings: "tnum", "lnum";
+}
+.w-section-rule {
+  border: 0;
+  border-top: 1px solid var(--w-rule);
+  margin: 48px 0;
+}
+
+/* ============================================================
+   Footnote popover · margin notes · share row
+   ============================================================ */
+
+/* Inline footnote popover — visible on hover/focus of the ¹ reference.
+   At wide widths (≥ 1240px) it's hidden in favour of the margin note. */
+.w-fn {
+  position: relative;
+  display: inline;
+}
+.w-fn__pop {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: 260px;
+  max-width: 80vw;
+  background: var(--w-frost-deep);
+  border: 1px solid var(--w-rule);
+  padding: 10px 14px 12px;
+  font-family: var(--w-font-body);
+  font-size: 14px;
+  font-variation-settings: normal;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--w-ink);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 140ms var(--w-ease), visibility 140ms var(--w-ease), transform 140ms var(--w-ease);
+  pointer-events: none;
+  z-index: 10;
+  text-align: left;
+  white-space: normal;
+  vertical-align: baseline;
+}
+.w-fn__pop::before {
+  /* small hairline pointer */
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 12px;
+  height: 1px;
+  background: var(--w-rule);
+  transform: translate(-50%, 1px);
+}
+.w-fn:hover .w-fn__pop,
+.w-fn:focus-within .w-fn__pop {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Margin notes — render after each paragraph that has footnotes.
+   Hidden at narrow widths; float into the right margin at ≥ 1240px. */
+.w-margin-notes {
+  display: none;
+}
+.w-margin-note__num {
+  font-family: var(--w-font-mono);
+  font-size: 0.82em;
+  color: var(--w-accent);
+  padding-right: 0.45em;
+  font-feature-settings: "tnum", "lnum";
+}
+@media (min-width: 1280px) {
+  .w-margin-notes {
+    display: block;
+    float: right;
+    width: 220px;
+    margin: 0 -240px 16px 28px;
+    border-left: 1px solid var(--w-rule);
+    padding: 2px 0 2px 16px;
+    font-family: var(--w-font-body);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--w-fg-muted);
+    letter-spacing: 0;
+  }
+  .w-margin-note {
+    margin-bottom: 0.7em;
+    text-wrap: pretty;
+  }
+  .w-margin-note:last-child { margin-bottom: 0; }
+  /* At wide widths the inline popover is redundant — hide it */
+  .w-fn__pop { display: none; }
+  /* Hide the bottom Notes section since margins cover them */
+  .w-footnotes { display: none; }
+}
+
+/* Photo essay photo button — wraps the image so the whole tile is clickable */
+.w-pe__photo-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: zoom-in;
+  position: relative;
+}
+.w-pe__photo-btn:focus-visible {
+  outline: 2px solid var(--w-accent);
+  outline-offset: 4px;
+}
+.w-pe__photo-btn .ph {
+  transition: opacity 220ms var(--w-ease);
+}
+.w-pe__photo-btn:hover .ph { opacity: 0.92; }
+
+/* Lightbox · fullscreen photo viewer */
+.w-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 24, 21, 0.96);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 80px;
+  cursor: zoom-out;
+  animation: w-lightbox-in 200ms var(--w-ease);
+}
+@keyframes w-lightbox-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.w-lightbox__stage {
+  max-width: 1200px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  cursor: default;
+}
+.w-lightbox__img {
+  aspect-ratio: 3 / 2;
+  width: min(1200px, 80vw);
+  max-height: 78vh;
+  position: relative;
+  overflow: hidden;
+}
+.w-lightbox__cap {
+  font-family: var(--w-font-mono);
+  font-size: 13px;
+  letter-spacing: 0.015em;
+  color: var(--w-rule);
+  text-align: center;
+  max-width: 60ch;
+  line-height: 1.45;
+}
+.w-lightbox__close,
+.w-lightbox__nav {
+  position: absolute;
+  background: transparent;
+  border: 0;
+  color: var(--w-bg);
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 14px 18px;
+  transition: opacity 120ms var(--w-ease);
+  opacity: 0.7;
+}
+.w-lightbox__close { top: 18px; right: 18px; }
+.w-lightbox__close:hover,
+.w-lightbox__nav:hover { opacity: 1; }
+.w-lightbox__close:focus-visible,
+.w-lightbox__nav:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--w-bg);
+  outline-offset: 2px;
+}
+.w-lightbox__nav {
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
+  letter-spacing: 0;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+}
+.w-lightbox__nav.prev { left: 20px; }
+.w-lightbox__nav.next { right: 20px; }
+.w-lightbox__counter {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--w-rule);
+  font-feature-settings: "tnum", "lnum";
+}
+@media (max-width: 640px) {
+  .w-lightbox { padding: 56px 16px; }
+  .w-lightbox__nav.prev { left: 0; }
+  .w-lightbox__nav.next { right: 0; }
+}
+
+/* ============================================================
+   Share row at the bottom of essays
+   ============================================================ */
+.w-share {
+  margin-top: 56px;
+  padding-top: 22px;
+  border-top: 1px solid var(--w-rule);
+  display: flex;
+  gap: 22px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-feature-settings: "tnum", "lnum";
+}
+.w-share__btn {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--w-slate);
+  padding: 1px 0 2px;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition: color 120ms var(--w-ease), border-color 120ms var(--w-ease);
+}
+.w-share__btn:hover {
+  color: var(--w-slate-hover);
+  border-bottom-color: transparent;
+}
+.w-share__btn.is-copied {
+  color: var(--w-sage);
+  border-bottom-color: transparent;
+}
+.w-share__link {
+  color: var(--w-sage);
+  border: 0;
+  text-decoration: none;
+  transition: color 120ms var(--w-ease);
+}
+.w-share__link:hover { color: var(--w-ink); }
+
+/* ============================================================
+   MDX footnote section — Astro renders as
+   <section class="footnotes"><ol>...</ol></section>
+   ============================================================ */
+.footnotes {
+  border-top: 1px solid var(--w-rule);
+  margin-top: var(--w-space-7);
+  padding-top: var(--w-space-5);
+  font-family: var(--w-font-body);
+  font-size: 0.88em;
+  line-height: 1.5;
+  color: var(--w-fg-muted);
+}
+.footnotes::before {
+  content: "Notes";
+  display: block;
+  font-family: var(--w-font-mono);
+  font-size: var(--w-fs-meta);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--w-muted);
+  margin-bottom: var(--w-space-3);
+}
+.footnotes ol {
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+  counter-reset: fn;
+}
+.footnotes ol li {
+  counter-increment: fn;
+  position: relative;
+  padding-left: 2.2em;
+  margin: 0.5em 0;
+}
+.footnotes ol li::before {
+  content: counter(fn);
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  font-family: var(--w-font-mono);
+  font-size: 0.9em;
+  color: var(--w-accent);
+  font-variant-numeric: tabular-nums;
+}
+.footnotes a[href^="#fnref"] {
+  color: var(--w-muted);
+  border-bottom: 0;
+  padding-left: 0.4em;
+  font-family: var(--w-font-mono);
+  font-size: 0.85em;
+}
+.footnotes a[href^="#fnref"]:hover { color: var(--w-accent); }

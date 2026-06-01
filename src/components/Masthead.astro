@@ -1,0 +1,33 @@
+---
+interface Props {
+  route: string;
+}
+
+const { route } = Astro.props;
+
+const nav = [
+  { href: '/journal', label: 'journal' },
+  { href: '/photographs', label: 'photographs' },
+  { href: '/about', label: 'about' },
+  { href: '/now', label: 'now' },
+  { href: '/colophon', label: 'colophon' },
+];
+
+function isActive(href: string, route: string): string {
+  if (href === '/journal' && route.startsWith('/journal')) return 'is-active';
+  if (href === '/photographs' && route.startsWith('/photographs')) return 'is-active';
+  if (href === route) return 'is-active';
+  return '';
+}
+---
+<header class="w-mast">
+  <div class="w-mast__row">
+    <a href="/" class="w-mast__wm">warfeous</a>
+    <nav class="w-mast__nav">
+      {nav.map(n => (
+        <a href={n.href} class:list={[isActive(n.href, route)]}>{n.label}</a>
+      ))}
+    </nav>
+  </div>
+  <div class="w-mast__tagline">Notes from Southern Alberta</div>
+</header>

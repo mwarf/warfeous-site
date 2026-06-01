@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
+---
+<BaseLayout title="Colophon">
+  <Masthead slot="masthead" route="/colophon" />
+  <Footer slot="footer" />
+
+  <div class="w-page" style="max-width: 680px;">
+    <p class="w-eyebrow">Colophon</p>
+    <h1 style={{
+      fontFamily: 'var(--w-font-display)',
+      fontSize: 'clamp(40px, 4vw + 16px, 60px)',
+      fontWeight: 400,
+      letterSpacing: '-0.034em',
+      color: 'var(--w-ink-soft)',
+      margin: '0 0 24px',
+      fontVariationSettings: '"opsz" 144, "wght" 420, "SOFT" 50',
+      lineHeight: 0.95,
+    }}>How this site is made</h1>
+
+    <section style="padding: 32px 0; border-top: 1px solid var(--w-rule);">
+      <div style="font-family: var(--w-font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--w-sage); margin-bottom: 8px;">01</div>
+      <h2 style="margin-top: 0;">Build</h2>
+      <div style="font-family: var(--w-font-body); font-size: 17px; line-height: 1.55; color: var(--w-ink); max-width: 60ch;">
+        Astro on Cloudflare Pages. MDX for entries. Content collections enforce a single schema across essays, notes, and photo essays. No CMS, no admin. Markdown in, site out.
+      </div>
+    </section>
+
+    <section style="padding: 32px 0; border-top: 1px solid var(--w-rule);">
+      <div style="font-family: var(--w-font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--w-sage); margin-bottom: 8px;">02</div>
+      <h2 style="margin-top: 0;">Typefaces</h2>
+      <div style="font-family: var(--w-font-body); font-size: 17px; line-height: 1.55; color: var(--w-ink); max-width: 60ch;">
+        <dl>
+          <dt>Display</dt><dd>Fraunces — variable, opsz 144 at title sizes</dd>
+          <dt>Body</dt><dd>Newsreader — designed for screen reading at 17–19px</dd>
+          <dt>Mono</dt><dd>iA Writer Mono S — metadata, dates, captions</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section style="padding: 32px 0; border-top: 1px solid var(--w-rule);">
+      <div style="font-family: var(--w-font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--w-sage); margin-bottom: 8px;">03</div>
+      <h2 style="margin-top: 0;">Photography</h2>
+      <div style="font-family: var(--w-font-body); font-size: 17px; line-height: 1.55; color: var(--w-ink); max-width: 60ch;">
+        Mostly a Fujifilm X-T5 with a 23mm f/2. Occasionally a borrowed Sigma 24mm wide on a Canon body. 35mm film when the trip warrants it. Stills delivered through Cloudflare Images. Video through Cloudflare Stream.
+      </div>
+    </section>
+
+    <section style="padding: 32px 0; border-top: 1px solid var(--w-rule);">
+      <div style="font-family: var(--w-font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--w-sage); margin-bottom: 8px;">04</div>
+      <h2 style="margin-top: 0;">Editing</h2>
+      <div style="font-family: var(--w-font-body); font-size: 17px; line-height: 1.55; color: var(--w-ink); max-width: 60ch;">
+        DaVinci Resolve for grade, Pro Tools for sound, Lightroom for stills. The grain pass is intentional and stays in the export.
+      </div>
+    </section>
+  </div>
+</BaseLayout>
