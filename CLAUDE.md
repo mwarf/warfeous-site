@@ -18,11 +18,12 @@ It is **not** the studio site (that's coalbanks.com). It is not a marketplace, n
 
 - **Astro** (latest stable), MDX integration. Astro components only — no React/Vue/Svelte unless a specific island genuinely demands it (the lightbox is the one likely candidate; see Interactions).
 - **Content Collections** with zod schemas (see Content model).
-- **Cloudflare Pages** — auto-build on push to `main`, preview deploys per PR.
+- **Cloudflare Workers** via Wrangler (`pnpm run deploy`). Static output served from Workers with KV session binding.
 - **Cloudflare Images** — all editorial stills, referenced by Image ID in frontmatter.
 - **Cloudflare Stream** — all video, HLS, referenced by Stream UID.
 - **Cloudflare Web Analytics** — cookieless, no banner. No GA4, no third-party scripts.
 - `@astrojs/sitemap`, `@astrojs/rss`, `satori` + `@resvg/resvg-js` for OG generation. `pagefind` deferred to v2.
+- **pnpm** for package management. No npm, no yarn.
 
 **Zero JS by default.** Any client-side script must be justified against the performance budget below.
 
@@ -124,6 +125,7 @@ const journal = defineCollection({
     video: z.object({ streamId: z.string(), poster: z.string(), caption: z.string().optional() }).optional(),
     gallery: z.string().optional(),          // references a galleries slug
     draft: z.boolean().default(false),
+    dropcap: z.boolean().default(true),      // set false when opening sentence is too short to wrap
     canonicalUrl: z.string().url().optional(),
     location: z.string().optional(),
   }),
@@ -145,9 +147,12 @@ const galleries = defineCollection({
 ```
 
 ### Presentation by type
-- **Essay** — full typographic treatment. Centred single column, 66–68ch measure. Generous lead paragraph (larger Newsreader, wght 380). Reading time shown. Drop cap on first body paragraph. Footnotes supported. Hero image/video optional.
+- **Essay** — full typographic treatment. Centred single column, 66–68ch measure. Generous lead paragraph (larger Newsreader, wght 380). Reading time shown. **Drop cap on first body paragraph** (opt out with `dropcap: false` when the opening sentence is too short to wrap around the cap; short fragments under ~10 words look wrong with a drop cap). Footnotes supported. Hero image/video optional. **Mid-article pull quotes** use `<blockquote class="w-pullquote">` for a centred, ruled treatment distinct from regular blockquotes.
 - **Note** — short-form, denser, narrower column (~620px), less chrome, no hero unless useful. Date prominent.
 - **Photo essay** — image-led. Full-bleed allowed for individual images. Captions are primary text, not decoration. Written intro optional.
+
+### Title length
+Keep titles under ~50 characters. The h1 type scale (`clamp(40px, 4.4vw + 16px, 64px)`) wraps awkwardly past ~55 chars. Prefer short, specific titles and let the excerpt do the positioning work.
 
 ---
 
@@ -165,6 +170,8 @@ Build these as `.astro` components. **High-fidelity visual recreations already e
 | `StreamVideo.astro` | kit video-poster card | Poster is LCP. Tap-to-play. Autoplay ONLY when muted + in viewport + `prefers-reduced-motion: no-preference` + not `Save-Data`. Mobile: poster only by default. |
 | `Gallery.astro` | kit `PhotoEssayEntry` + `Lightbox` | Image-led layout; lightbox on click (see Interactions). |
 | `Footnotes` | kit footnote popover + margin notes | See Interactions. |
+| `ShareRow.astro` | kit share row | Copy link, Share to LinkedIn, Reply by email. Slate mono. Tiny inline script for clipboard. |
+| `PrevNext.astro` | — | Previous/next essay navigation at article bottom. Hairline rule above. |
 | `MonthGroup` | kit month headers | Mono `MAY 2026` headers grouping the dense list / journal index. |
 
 ### Month-grouping helper
@@ -213,8 +220,8 @@ All motion respects `prefers-reduced-motion`. **No page transitions** (hard cuts
 
 1. Write entry in `src/content/journal/[slug].mdx`.
 2. Upload images to Cloudflare Images, paste IDs into frontmatter. Video → Stream, paste UID.
-3. `npm run dev` to preview. `git commit`, push branch.
-4. PR → Cloudflare Pages preview deploy. Merge to `main` → production.
+3. `pnpm run dev` to preview. `git commit`, push branch.
+4. `pnpm run deploy` to build and deploy to Cloudflare Workers via Wrangler.
 
 Markdown in, site out. Do not add an admin UI.
 
