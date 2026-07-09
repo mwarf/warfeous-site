@@ -6,7 +6,7 @@ import EntryRow from '../components/EntryRow.astro';
 import EntryMeta from '../components/EntryMeta.astro';
 import MonthGroup from '../components/MonthGroup.astro';
 import PhotoTile from '../components/PhotoTile.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import { groupEntriesByMonth } from '../lib/utils';
 
 const allEntries = await getCollection('journal', ({ data }) => !data.draft);
@@ -17,29 +17,26 @@ const featuredIndex = featured ? allEntries.indexOf(featured) : -1;
 const dense = featured ? allEntries.filter((_, i) => i !== featuredIndex).slice(0, 5) : allEntries.slice(0, 5);
 const denseGroups = groupEntriesByMonth(dense);
 const latestPhoto = allEntries.find(e => e.data.type === 'photo-essay');
+
+let latestPhotoImage: { src: string; alt: string } | undefined;
+if (latestPhoto?.data.gallery) {
+  const g = await getEntry('galleries', latestPhoto.data.gallery.id);
+  const first = g?.data.images[0];
+  if (first) latestPhotoImage = { src: first.src, alt: first.alt };
+}
 ---
-<BaseLayout title={featured ? featured.data.title : 'warfeous'} article>
-  <Masthead slot="masthead" route="/" />
+<BaseLayout title="warfeous">
+  <Masthead slot="masthead" />
   <Footer slot="footer" />
 
   <div class="w-page">
     {featured && (
-    <section style="padding-bottom: 28px; margin-bottom: 0;">
+    <section class="w-home__featured">
       <div class="w-eyebrow">Latest essay</div>
-      <a href={`/journal/${featured.id}`} style="display: block; text-decoration: none; color: inherit; border: 0;">
-        <h1 style={{
-          fontFamily: 'var(--w-font-display)',
-          fontSize: 'clamp(48px, 6vw + 16px, 88px)',
-          fontWeight: 400,
-          letterSpacing: '-0.038em',
-          fontVariationSettings: '"opsz" 144, "wght" 420, "SOFT" 50',
-          color: 'var(--w-ink-soft)',
-          margin: '0 0 18px',
-          lineHeight: 0.94,
-          textWrap: 'balance',
-        }}>{featured.data.title}</h1>
+      <a href={`/journal/${featured.id}`} class="w-home__featured-link">
+        <h1 class="w-pagetitle w-pagetitle--home">{featured.data.title}</h1>
         {featured.data.excerpt && (
-          <p class="w-lead" style="font-size: 21px; margin: 0 0 16px;">{featured.data.excerpt}</p>
+          <p class="w-lead">{featured.data.excerpt}</p>
         )}
         <EntryMeta
           type={featured.data.type}
@@ -51,7 +48,7 @@ const latestPhoto = allEntries.find(e => e.data.type === 'photo-essay');
     </section>
     )}
 
-    <section style="margin-top: 32px;">
+    <section class="w-home__dense">
       {denseGroups.map(group => (
         <>
           <MonthGroup label={group.label} />
@@ -70,15 +67,28 @@ const latestPhoto = allEntries.find(e => e.data.type === 'photo-essay');
     </section>
 
     {latestPhoto && (
-      <section style="margin-top: 64px;">
+      <section class="w-home__photo">
         <div class="w-eyebrow">Latest photo essay</div>
         <PhotoTile
           slug={latestPhoto.id}
           title={latestPhoto.data.title}
           publishedAt={latestPhoto.data.publishedAt}
           location={latestPhoto.data.location}
+          image={latestPhotoImage}
         />
       </section>
     )}
   </div>
 </BaseLayout>
+
+<style>
+  .w-home__featured { padding-bottom: 28px; }
+  .w-home__featured-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border: 0;
+  }
+  .w-home__dense { margin-top: 32px; }
+  .w-home__photo { margin-top: 64px; }
+</style>

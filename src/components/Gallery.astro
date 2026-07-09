@@ -1,25 +1,48 @@
 ---
-import { TONES } from '../lib/utils';
+import Img from './Img.astro';
+import { imageUrl } from '../lib/images';
+
+export interface GalleryImage {
+  src: string;
+  alt: string;
+  caption?: string;
+  width: number;
+  height: number;
+}
 
 interface Props {
-  images: { tone?: string; cap?: string }[];
+  images: GalleryImage[];
 }
 
 const { images } = Astro.props;
+
+// Precomputed for the lightbox: full-size URL plus text, no ID logic on the client.
+const lightboxImages = images.map(img => ({
+  full: imageUrl(img.src, 1600),
+  alt: img.alt,
+  cap: img.caption || img.alt,
+}));
 ---
 <div class="w-gallery">
-  {images.map((f, i) => (
+  {images.map((img, i) => (
     <figure class:list={['w-pe__fig', { full: i % 3 === 1 }]}>
       <button
         class="w-pe__photo-btn"
         data-lightbox-index={i}
-        aria-label={`Open photo ${i + 1} of ${images.length}${f.cap ? ': ' + f.cap : ''}`}
+        aria-label={`Open photo ${i + 1} of ${images.length}: ${img.caption || img.alt}`}
       >
-        <div class="ph" style={`background: ${TONES[f.tone || 'glacier']}`}>
-          <div class="w-hero__grain"></div>
-        </div>
+        <Img
+          src={img.src}
+          alt={img.alt}
+          width={img.width}
+          height={img.height}
+          sizes={i % 3 === 1 ? '100vw' : '(min-width: 1120px) 1080px, 100vw'}
+          loading={i === 0 ? 'eager' : 'lazy'}
+          fetchpriority={i === 0 ? 'high' : undefined}
+        />
+        <div class="w-hero__grain"></div>
       </button>
-      {f.cap && <figcaption class="w-pe__cap">{f.cap}</figcaption>}
+      {(img.caption || img.alt) && <figcaption class="w-pe__cap">{img.caption || img.alt}</figcaption>}
     </figure>
   ))}
 </div>
@@ -28,16 +51,16 @@ const { images } = Astro.props;
   <button class="w-lightbox__close" id="lb-close" aria-label="Close (Esc)">Close</button>
   <div class="w-lightbox__counter" id="lb-counter"></div>
   <div class="w-lightbox__stage" id="lb-stage">
-    <div class="w-lightbox__img" id="lb-img"></div>
+    <div class="w-lightbox__img" id="lb-img"><img id="lb-img-el" alt="" /></div>
     <div class="w-lightbox__cap" id="lb-cap"></div>
   </div>
   <button class="w-lightbox__nav prev" id="lb-prev" aria-label="Previous photo (←)">←</button>
   <button class="w-lightbox__nav next" id="lb-next" aria-label="Next photo (→)">→</button>
 </div>
 
-<script define:vars={{ images, TONES }}>
+<script define:vars={{ images: lightboxImages }}>
   const lightbox = document.getElementById('w-lightbox');
-  const lbImg = document.getElementById('lb-img');
+  const lbImgEl = document.getElementById('lb-img-el');
   const lbCap = document.getElementById('lb-cap');
   const lbCounter = document.getElementById('lb-counter');
   const lbClose = document.getElementById('lb-close');
@@ -71,7 +94,8 @@ const { images } = Astro.props;
   function show(idx) {
     currentIdx = idx;
     const f = images[idx];
-    lbImg.style.background = TONES[f.tone || 'glacier'];
+    lbImgEl.src = f.full;
+    lbImgEl.alt = f.alt;
     lbCap.textContent = f.cap || '';
     lbCounter.textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
     lbPrev.style.display = idx > 0 ? '' : 'none';

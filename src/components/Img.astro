@@ -1,0 +1,39 @@
+---
+import { imageUrl, imageSrcset } from '../lib/images';
+
+interface Props {
+  src: string; // Cloudflare Image ID, or a local/absolute path
+  alt: string;
+  width?: number;
+  height?: number;
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  sizes = '(min-width: 800px) 760px, 100vw',
+  loading = 'lazy',
+  fetchpriority,
+  class: className,
+} = Astro.props;
+
+const srcset = imageSrcset(src);
+---
+<img
+  src={imageUrl(src)}
+  srcset={srcset}
+  sizes={srcset ? sizes : undefined}
+  alt={alt}
+  width={width}
+  height={height}
+  loading={loading}
+  fetchpriority={fetchpriority}
+  decoding="async"
+  class={className}
+/>

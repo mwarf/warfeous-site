@@ -33,15 +33,10 @@ const isPhotoEssay = type === 'photo-essay';
 const isEssay = type === 'essay';
 const noDropcap = isEssay && dropcap === false;
 
-let galleryImages: { tone: string; cap: string }[] = [];
+let galleryImages: { src: string; alt: string; caption?: string; width: number; height: number }[] = [];
 if (isPhotoEssay && gallery) {
   const galleryEntry = await getEntry('galleries', gallery.id);
-  if (galleryEntry) {
-    galleryImages = galleryEntry.data.images.map(img => ({
-      tone: 'glacier',
-      cap: img.caption || img.alt,
-    }));
-  }
+  galleryImages = galleryEntry?.data.images ?? [];
 }
 
 const mins = readingTime(entry.body || '');
@@ -67,29 +62,31 @@ const jsonLd = JSON.stringify({
 <BaseLayout
   title={title}
   description={excerpt}
+  canonicalUrl={entry.data.canonicalUrl}
+  ogImage={new URL(`/og/${entry.id}.png`, Astro.site).toString()}
   article
   jsonLd={jsonLd}
 >
-  <Masthead slot="masthead" route={`/journal/${entry.id}`} />
+  <Masthead slot="masthead" />
   <Footer slot="footer" />
 
-  <article class:list={['w-article', 'w-page', { 'w-article--essay': isEssay, 'w-article--note': isNote, 'w-article--pe': isPhotoEssay, 'w-article--no-dropcap': noDropcap }]} data-type={type} style={`max-width: ${isNote ? '620px' : isPhotoEssay ? '1080px' : '760px'}`}>
+  <article class:list={['w-article', 'w-page', { 'w-article--essay': isEssay, 'w-article--note': isNote, 'w-article--pe': isPhotoEssay, 'w-article--no-dropcap': noDropcap }]} data-type={type}>
     <header>
       <EntryMeta
         type={type}
         publishedAt={publishedAt}
         location={location}
-        readingMins={mins}
+        readingMins={isEssay ? mins : undefined}
         slug={entry.id}
       />
-      <h1 style={{ marginTop: 16 }}>{title}</h1>
+      <h1 class="w-article__title">{title}</h1>
       {!isNote && excerpt && (
         <p class="w-article__lead">{excerpt}</p>
       )}
     </header>
 
     {!isNote && !isPhotoEssay && hero && (
-      <HeroImage tone="glacier" caption={`${location || ''}${location ? ' · ' : ''}${formatDate(publishedAt)}`} />
+      <HeroImage src={hero.src} alt={hero.alt} caption={hero.caption || `${location ? `${location} · ` : ''}${formatDate(publishedAt)}`} />
     )}
 
     {isPhotoEssay && galleryImages.length > 0 && (

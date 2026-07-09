@@ -2,55 +2,70 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Masthead from '../components/Masthead.astro';
 import Footer from '../components/Footer.astro';
-import { TONES } from '../lib/utils';
 ---
 <BaseLayout title="About">
-  <Masthead slot="masthead" route="/about" />
+  <Masthead slot="masthead" />
   <Footer slot="footer" />
 
-  <div class="w-page" style="max-width: 680px;">
+  <div class="w-page w-about">
     <p class="w-eyebrow">About</p>
-    <h1 style={{
-      fontFamily: 'var(--w-font-display)',
-      fontSize: 'clamp(40px, 4vw + 16px, 60px)',
-      fontWeight: 400,
-      letterSpacing: '-0.034em',
-      color: 'var(--w-ink-soft)',
-      margin: '0 0 32px',
-      fontVariationSettings: '"opsz" 144, "wght" 420, "SOFT" 50',
-      lineHeight: 0.95,
-    }}>Michael Warf</h1>
+    <h1 class="w-pagetitle w-about__title">Michael Warf</h1>
 
-    <p style={{
-      fontFamily: 'var(--w-font-body)',
-      fontSize: '22px',
-      fontVariationSettings: '"opsz" 36, "wght" 380',
-      lineHeight: 1.42,
-      letterSpacing: '-0.005em',
-      color: 'var(--w-ink-soft)',
-      margin: '0 0 36px',
-      maxWidth: '52ch',
-      textWrap: 'pretty',
-    }}>
+    <p class="w-about__lede">
       Documentary filmmaker and photographer based in Pincher Creek, on Treaty 7 territory in Southern Alberta, within a half-day's drive of the Crowsnest Pass.
     </p>
 
-    <figure style="margin: 0 0 24px; float: right; width: 42%; margin-left: 32px;">
-      <div style={`aspect-ratio: 4/5; background: ${TONES.warm}; position: relative; overflow: hidden;`}>
-        <div class="w-hero__grain"></div>
-      </div>
-      <figcaption style="font-family: var(--w-font-mono); font-size: 12px; letter-spacing: .015em; color: var(--w-muted); margin-top: 10px; line-height: 1.45;">
+    <figure class="w-about__portrait">
+      <div class="w-about__portrait-ph"></div>
+      <figcaption>
         Pincher Creek, March 2026. Self-portrait on the ranch road.
       </figcaption>
     </figure>
 
-    <p>
+    <p class="w-prose">
       I make non-fiction work for clients in agriculture, conservation, and regional tourism. The studio is <a href="https://coalbanks.com">Coalbanks Creative</a>. The journal is where the unfinished thinking lives: notes from the cut, photo essays from the field, longer pieces when something earns the length.
     </p>
-    <p>
-      This is not a CV. For project work, the studio site is the right address. For anything else, the email at the bottom of every page is the right address.
+    <p class="w-prose">
+      This is not a CV. For project work, the studio site is the right address. For anything else, write me at <a href="mailto:michael@coalbanks.com">michael@coalbanks.com</a>.
     </p>
-
-    <div style="clear: both;"></div>
   </div>
 </BaseLayout>
+
+<style>
+  .w-about { max-width: 680px; }
+  .w-about__title { margin-bottom: 32px; }
+  .w-about__lede {
+    font-family: var(--w-font-body);
+    font-size: 22px;
+    font-variation-settings: "opsz" 36, "wght" 380;
+    line-height: 1.42;
+    letter-spacing: -0.005em;
+    color: var(--w-ink-soft);
+    margin: 0 0 36px;
+    max-width: 52ch;
+    text-wrap: pretty;
+  }
+  .w-about__portrait {
+    margin: 0 0 24px 32px;
+    float: right;
+    width: 42%;
+  }
+  .w-about__portrait-ph {
+    aspect-ratio: 4 / 5;
+    background: var(--w-frost-deep);
+  }
+  .w-about__portrait figcaption {
+    font-family: var(--w-font-mono);
+    font-size: 12px;
+    letter-spacing: 0.015em;
+    color: var(--w-muted);
+    margin-top: 10px;
+    line-height: 1.45;
+  }
+  .w-about .w-prose { margin: 0 0 1.15em; }
+  .w-about::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+</style>

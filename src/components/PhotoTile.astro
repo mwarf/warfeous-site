@@ -1,19 +1,21 @@
 ---
-import { TONES, formatDate } from '../lib/utils';
+import Img from './Img.astro';
+import { formatDate } from '../lib/utils';
 
 interface Props {
   slug: string;
   title: string;
   publishedAt: Date;
   location?: string;
-  tone?: string;
+  image?: { src: string; alt: string };
 }
 
-const { slug, title, publishedAt, location, tone = 'glacier' } = Astro.props;
+const { slug, title, publishedAt, location, image } = Astro.props;
 const dateStr = formatDate(publishedAt);
 ---
 <a href={`/journal/${slug}`} class="w-tile">
-  <div class="w-tile__img" style={`background: ${TONES[tone]}`}>
+  <div class="w-tile__img">
+    {image && <Img src={image.src} alt={image.alt} sizes="(min-width: 720px) 50vw, 100vw" />}
     <div class="w-tile__grain"></div>
   </div>
   <div class="w-tile__caption">{dateStr}{location ? ` · ${location}` : ''}</div>

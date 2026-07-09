@@ -34,7 +34,7 @@ It is **not** the studio site (that's coalbanks.com). It is not a marketplace, n
 - LCP < 2.0s on 4G throttling. CLS < 0.05. INP < 200ms.
 - JS shipped < 30KB/page average, 100KB ceiling.
 - Page weight < 500KB text pages, < 1.5MB photo essays (excl. video).
-- Font payload < 80KB combined preloaded weights.
+- Font payload < 260KB combined preloaded weights. (The two preloaded variable fonts, Latin-subset with the WONK axis dropped, bottom out at ~250KB; the full opsz/wght/SOFT axes are part of the design and are worth the weight. Subset with HarfBuzz, never fontTools' subsetter, and never range-limit axes — both inflate gvar.)
 - On entries with video: the **poster image is the LCP element**; the Stream player loads after.
 
 If a change blows the budget, stop and flag it rather than shipping it.

@@ -12,21 +12,12 @@ allEntries.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valu
 
 const groups = groupEntriesByMonth(allEntries);
 ---
-<BaseLayout title="Journal" article>
-  <Masthead slot="masthead" route="/journal" />
+<BaseLayout title="Journal">
+  <Masthead slot="masthead" />
   <Footer slot="footer" />
 
   <div class="w-page">
-    <h1 style={{
-      fontFamily: 'var(--w-font-display)',
-      fontSize: 'clamp(40px, 4vw + 16px, 60px)',
-      fontWeight: 400,
-      letterSpacing: '-0.034em',
-      color: 'var(--w-ink-soft)',
-      margin: '0 0 48px',
-      fontVariationSettings: '"opsz" 144, "wght" 420, "SOFT" 50',
-      lineHeight: 0.95,
-    }}>Journal</h1>
+    <h1 class="w-pagetitle">Journal</h1>
 
     <section>
       {groups.map(group => (

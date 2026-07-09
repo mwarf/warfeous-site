@@ -38,3 +38,6 @@ pnpm-debug.log*
 # editorial images live on Cloudflare Images (referenced by ID in frontmatter).
 # small UI/OG images are fine in src/assets/ or public/ — just keep them web-ready.
 src/content/**/raw/
+
+# wrangler local state
+.wrangler/

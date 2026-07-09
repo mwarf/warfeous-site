@@ -1,9 +1,9 @@
 ---
 interface Props {
-  route: string;
+  route?: string;
 }
 
-const { route } = Astro.props;
+const { route = Astro.url.pathname } = Astro.props;
 
 const nav = [
   { href: '/journal', label: 'journal' },

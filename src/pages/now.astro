@@ -7,37 +7,63 @@ const log = [
   { date: '22 MAY', text: 'Cutting a short doc on a fourth-generation ranch east of Pincher Creek. Three days in the edit suite, eight to go.' },
   { date: '15 MAY', text: 'Re-grading the Columbia Icefields plates from the May 9 trip. The 24mm Sigma flares harder than I want at f/4.' },
   { date: '08 MAY', text: 'Reading the new Annie Ernaux translation and the Field Mag back catalogue.' },
-  { date: '01 MAY', text: 'Building this journal in public. Astro, Cloudflare Pages, no CMS. First six entries seeded.' },
+  { date: '01 MAY', text: 'Building this journal in public. Astro, Cloudflare Workers, no CMS. First six entries seeded.' },
 ];
 ---
 <BaseLayout title="Now">
-  <Masthead slot="masthead" route="/now" />
+  <Masthead slot="masthead" />
   <Footer slot="footer" />
 
-  <div class="w-page" style="max-width: 620px;">
+  <div class="w-page w-now">
     <p class="w-eyebrow">Now · updated 22 May 2026</p>
-    <h1 style={{
-      fontFamily: 'var(--w-font-display)',
-      fontSize: 'clamp(40px, 4vw + 16px, 60px)',
-      fontWeight: 400,
-      letterSpacing: '-0.034em',
-      color: 'var(--w-ink-soft)',
-      margin: '0 0 36px',
-      fontVariationSettings: '"opsz" 144, "wght" 420, "SOFT" 50',
-      lineHeight: 0.95,
-    }}>What I'm on this month</h1>
+    <h1 class="w-pagetitle w-now__title">What I'm on this month</h1>
 
-    <dl style="display: grid; grid-template-columns: minmax(5em, 6em) 1fr; gap: 0.8em 1.6em; max-width: 60ch;">
+    <dl class="w-now__log">
       {log.map(item => (
         <>
           <dt>{item.date}</dt>
-          <dd style="font-family: var(--w-font-body); font-size: 17px; line-height: 1.5;">{item.text}</dd>
+          <dd>{item.text}</dd>
         </>
       ))}
     </dl>
 
-    <p style="font-family: var(--w-font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--w-sage); margin-top: 36px; max-width: 60ch;">
+    <p class="w-now__convention">
       Following the <a href="https://nownownow.com">nownownow.com</a> convention.
     </p>
   </div>
 </BaseLayout>
+
+<style>
+  .w-now { max-width: 620px; }
+  .w-now__title { margin-bottom: 36px; }
+  .w-now__log {
+    display: grid;
+    grid-template-columns: minmax(5em, 6em) 1fr;
+    gap: 0.8em 1.6em;
+    max-width: 60ch;
+    margin: 0;
+  }
+  .w-now__log dt {
+    font-family: var(--w-font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--w-sage);
+    font-feature-settings: "tnum", "lnum";
+    padding-top: 0.25em;
+  }
+  .w-now__log dd {
+    font-family: var(--w-font-body);
+    font-size: 17px;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .w-now__convention {
+    font-family: var(--w-font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--w-sage);
+    margin-top: 36px;
+    max-width: 60ch;
+  }
+</style>

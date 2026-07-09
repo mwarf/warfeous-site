@@ -1,6 +1,4 @@
 ---
-import { ClientRouter } from 'astro:transitions';
-
 interface Props {
   title: string;
   description?: string;
@@ -37,8 +35,8 @@ const canonical = canonicalUrl || Astro.url.href;
   <link rel="canonical" href={canonical} />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="preload" href="/fonts/Fraunces-VariableFont_SOFT_WONK_opsz_wght.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/fonts/Newsreader-VariableFont_opsz_wght.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/Fraunces-Roman-subset.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/Newsreader-Roman-subset.woff2" as="font" type="font/woff2" crossorigin />
 
   <meta property="og:title" content={title} />
   <meta property="og:site_name" content="warfeous" />
@@ -46,14 +44,15 @@ const canonical = canonicalUrl || Astro.url.href;
   <meta property="og:type" content={article ? 'article' : 'website'} />
   <meta property="og:url" content={canonical} />
   {ogImage && <meta property="og:image" content={ogImage} />}
-  <meta name="twitter:card" content="summary_large_image" />
+  {ogImage && <meta property="og:image:width" content="1200" />}
+  {ogImage && <meta property="og:image:height" content="630" />}
+  <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   {ogImage && <meta name="twitter:image" content={ogImage} />}
 
   <link rel="alternate" type="application/rss+xml" title="warfeous" href="/rss.xml" />
   {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
-  <ClientRouter />
 </head>
 <body>
   <a class="w-skiplink" href="#main">Skip to content</a>
@@ -66,29 +65,18 @@ const canonical = canonicalUrl || Astro.url.href;
   <div class="w-page">
     <slot name="footer" />
   </div>
-  <script>
-    document.addEventListener('astro:page-load', () => {
-      try {
-        var read = JSON.parse(localStorage.getItem('warfeous:read') || '[]');
-        document.querySelectorAll('[data-slug]').forEach(function(el) {
-          if (read.includes(el.dataset.slug)) {
-            el.classList.add('is-read');
-          }
-        });
-      } catch(e) {}
-
-      const slug = window.location.pathname.split('/').filter(Boolean).pop();
-      const isJournal = window.location.pathname.startsWith('/journal/');
-      if (isJournal && slug) {
-        try {
-          const list = JSON.parse(localStorage.getItem('warfeous:read') || '[]');
-          if (!list.includes(slug)) {
-            list.push(slug);
-            localStorage.setItem('warfeous:read', JSON.stringify(list));
-          }
-        } catch(e) {}
+  <script is:inline>
+    try {
+      var read = JSON.parse(localStorage.getItem('warfeous:read') || '[]');
+      document.querySelectorAll('[data-slug]').forEach(function (el) {
+        if (read.includes(el.dataset.slug)) el.classList.add('is-read');
+      });
+      var slug = window.location.pathname.split('/').filter(Boolean).pop();
+      if (window.location.pathname.startsWith('/journal/') && slug && !read.includes(slug)) {
+        read.push(slug);
+        localStorage.setItem('warfeous:read', JSON.stringify(read));
       }
-    });
+    } catch (e) {}
   </script>
 </body>
 </html>
