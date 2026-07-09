@@ -64,6 +64,7 @@ if (latestPhoto?.data.gallery) {
           ))}
         </>
       ))}
+      <a class="w-more" href="/journal">All entries →</a>
     </section>
 
     {latestPhoto && (
@@ -76,6 +77,7 @@ if (latestPhoto?.data.gallery) {
           location={latestPhoto.data.location}
           image={latestPhotoImage}
         />
+        <a class="w-more" href="/photographs">All photographs →</a>
       </section>
     )}
   </div>

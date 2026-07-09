@@ -12,21 +12,16 @@ interface Props {
 const { type, publishedAt, location, readingMins, slug } = Astro.props;
 const dateStr = formatDate(publishedAt);
 ---
+{/* Separators live inside the following part (nowrap), so a wrapped line
+    never ends on a dangling mid-dot. */}
 <div class="w-meta" data-slug={slug}>
   <span class="w-meta__readdot" aria-hidden="true"></span>
   <span class="w-meta__part"><strong>{TYPE_LABEL[type] || type}</strong></span>
   {readingMins && (
-    <>
-      <span class="w-meta__sep" aria-hidden="true"> · </span>
-      <span class="w-meta__part">{readingMins} min</span>
-    </>
+    <span class="w-meta__part"><span class="w-meta__sep" aria-hidden="true">·</span>{readingMins} min</span>
   )}
-  <span class="w-meta__sep" aria-hidden="true"> · </span>
-  <span class="w-meta__part">{dateStr}</span>
+  <span class="w-meta__part"><span class="w-meta__sep" aria-hidden="true">·</span>{dateStr}</span>
   {location && (
-    <>
-      <span class="w-meta__sep" aria-hidden="true"> · </span>
-      <span class="w-meta__part">{location}</span>
-    </>
+    <span class="w-meta__part"><span class="w-meta__sep" aria-hidden="true">·</span>{location}</span>
   )}
 </div>

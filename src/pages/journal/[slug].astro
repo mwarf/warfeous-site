@@ -65,6 +65,7 @@ const jsonLd = JSON.stringify({
   canonicalUrl={entry.data.canonicalUrl}
   ogImage={new URL(`/og/${entry.id}.png`, Astro.site).toString()}
   article
+  wide={isPhotoEssay}
   jsonLd={jsonLd}
 >
   <Masthead slot="masthead" />
@@ -95,8 +96,8 @@ const jsonLd = JSON.stringify({
 
     <Content />
 
-    <PrevNext prev={prev} next={next} />
-
     {!isPhotoEssay && <ShareRow />}
+
+    <PrevNext prev={prev} next={next} />
   </article>
 </BaseLayout>

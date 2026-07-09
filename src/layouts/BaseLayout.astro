@@ -62,7 +62,7 @@ const canonical = canonicalUrl || Astro.url.href;
   <main id="main">
     <slot />
   </main>
-  <div class="w-page">
+  <div class:list={['w-page', { 'w-page--wide': wide, 'w-page--photo': photo }]}>
     <slot name="footer" />
   </div>
   <script is:inline>

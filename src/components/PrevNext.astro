@@ -9,13 +9,13 @@ const { prev, next } = Astro.props;
 <nav class="w-pn">
   {prev ? (
     <a class="w-pn__cell" href={`/journal/${prev.slug}`}>
-      <div class="w-pn__label">← Previous</div>
+      <div class="w-pn__label">← Newer</div>
       <div class="w-pn__title">{prev.title}</div>
     </a>
   ) : <div />}
   {next ? (
     <a class="w-pn__cell next" href={`/journal/${next.slug}`}>
-      <div class="w-pn__label">Next →</div>
+      <div class="w-pn__label">Older →</div>
       <div class="w-pn__title">{next.title}</div>
     </a>
   ) : <div />}

@@ -327,7 +327,7 @@ html, body { margin: 0; padding: 0; background: var(--w-bg); }
 }
 .w-article p {
   font-family: var(--w-font-body);
-  font-size: 19px;
+  font-size: var(--w-fs-body); /* 17px mobile -> 19px desktop, per the type spec */
   line-height: 1.55;
   color: var(--w-ink);
   margin: 0 0 1.15em;
@@ -817,19 +817,6 @@ html, body { margin: 0; padding: 0; background: var(--w-bg); }
   line-height: 0.9;
 }
 
-/* Standalone lead paragraph (home featured teaser) */
-.w-lead {
-  font-family: var(--w-font-body);
-  font-size: 21px;
-  line-height: 1.4;
-  letter-spacing: -0.005em;
-  font-variation-settings: "opsz" 36, "wght" 380;
-  color: var(--w-ink-soft);
-  margin: 0 0 16px;
-  text-wrap: pretty;
-  max-width: 66ch;
-}
-
 /* Body prose outside articles (about page paragraphs, colophon sections) */
 .w-prose {
   font-family: var(--w-font-body);
@@ -842,3 +829,65 @@ html, body { margin: 0; padding: 0; background: var(--w-bg); }
 /* Article width by type (essay uses the .w-page default) */
 .w-article--note { max-width: 620px; }
 .w-article__title { margin-top: 16px; }
+
+/* Markdown wraps quote text in <p>; without this, .w-article p resets
+   pull quotes and blockquotes to body size and the treatment is lost. */
+.w-article blockquote p,
+.w-article .w-pullquote p {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  margin: 0;
+  max-width: none;
+  text-wrap: inherit;
+  hyphens: none;
+}
+
+/* Large sparse settings should not hyphenate */
+.w-lead,
+.w-article__lead,
+.w-row__excerpt {
+  hyphens: none;
+}
+
+/* Meta strings: separators bind to the token that follows, so a wrapped
+   line never ends on a dangling mid-dot. */
+.w-meta__part { white-space: nowrap; }
+
+/* Notes carry less chrome: smaller headline, date stays prominent */
+.w-article--note h1 {
+  font-size: clamp(28px, 2vw + 16px, 40px);
+  font-variation-settings: "opsz" 60, "wght" 460, "SOFT" 50;
+  letter-spacing: -0.022em;
+  line-height: 1.05;
+}
+
+/* Share row precedes prev/next at the article tail; the rule above
+   prev/next carries the separation, so the share row drops its own. */
+.w-article .w-share {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 48px;
+}
+
+/* Quiet mono continuation links (home dense list, photo tile) */
+.w-more {
+  display: inline-block;
+  margin-top: 20px;
+  font-family: var(--w-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--w-accent);
+  text-decoration: none;
+  border: 0;
+  transition: color 120ms var(--w-ease);
+}
+.w-more:hover { color: var(--w-accent-hover); }
+
+/* Five nav items fit one line on small screens */
+@media (max-width: 480px) {
+  .w-mast__row { row-gap: 10px; }
+  .w-mast__nav { gap: 14px; }
+  .w-mast__nav a { font-size: 15px; }
+}
