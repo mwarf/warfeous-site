@@ -41,3 +41,6 @@ src/content/**/raw/
 
 # wrangler local state
 .wrangler/
+
+# full upstream fonts kept locally for re-subsetting, not served
+fonts-source/
