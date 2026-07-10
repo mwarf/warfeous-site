@@ -79,9 +79,13 @@ Fonts: WOFF2 only, `font-display: swap`, preload the body + display weights used
 These apply to UI microcopy, error pages, and any string you generate — match the editorial register.
 
 - **First person singular.** "I", not "we". Second person sparingly, never for sales.
+- **Contractions are the default.** "It's", "don't", "I've", "that's". Spelling out "it is" and "do not" reads like a press release. Save the uncontracted form for genuine emphasis, and ration it to about one per essay.
+- **Write like you talk.** The register is a colleague explaining something over coffee, not a keynote. Asides and rhetorical questions are welcome. Aphoristic closers ("You cannot automate trust.") are rationed, not stacked.
+- **No third-person bio taglines** on entries. Never end an essay with "*Michael Warf is the founder of...*". The footer already says who I am, in first person.
 - **Canadian spelling.** colour, harbour, centre, behaviour.
 - **No em dashes.** Use commas, periods, or sentence breaks. Hyphens for compound modifiers only.
 - **Specific over abstract.** Name the place, the gear, the date. Never "stay tuned", "excited to share", "welcome to my journal", "in today's fast-paced world".
+- **Friendly is not peppy.** No exclamation marks doing enthusiasm's job, no hype vocabulary. Warmth comes from plain sentences and honest detail.
 - **Sentence case** for titles and UI. UPPERCASE only for mono meta labels. Wordmark is always lowercase: `warfeous`.
 - **Mid-dot `·`** is the one accepted decorative separator (used in meta strings).
 
