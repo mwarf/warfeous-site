@@ -20,6 +20,11 @@ logo:
   src: /wordmark.svg
   show_in_header: true
 
+# The config validator requires a media folder even though CMS uploads go
+# unused — editorial stills go to Cloudflare Images via `pnpm cf-upload`.
+media_folder: /public/images
+public_folder: /images
+
 # Leave optional fields out of frontmatter/JSON when empty, matching the
 # .optional()/.default() fields in src/content.config.ts.
 output:
