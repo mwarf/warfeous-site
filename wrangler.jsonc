@@ -5,6 +5,10 @@
 		"nodejs_compat",
 		"global_fetch_strictly_public"
 	],
+	"routes": [
+		{ "pattern": "warfeous.com", "custom_domain": true },
+		{ "pattern": "www.warfeous.com", "custom_domain": true }
+	],
 	"assets": {
 		"directory": "./dist",
 		"html_handling": "drop-trailing-slash"
