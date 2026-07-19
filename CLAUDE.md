@@ -18,6 +18,7 @@ It is **not** the studio site (that's coalbanks.com). It is not a marketplace, n
 
 - **Astro** (latest stable), MDX integration. Astro components only — no React/Vue/Svelte unless a specific island genuinely demands it (the lightbox is the one likely candidate; see Interactions).
 - **Content Collections** with zod schemas (see Content model).
+- **Sveltia CMS** at `/admin` — a static SPA in `public/admin/`, git-based, commits straight to the repo. Not part of the Astro build; adds zero JS to reader-facing pages.
 - **Cloudflare Workers** via Wrangler (`pnpm run deploy`). Static output served from Workers with KV session binding.
 - **Cloudflare Images** — all editorial stills, referenced by Image ID in frontmatter.
 - **Cloudflare Stream** — all video, HLS, referenced by Stream UID.
@@ -220,14 +221,14 @@ All motion respects `prefers-reduced-motion`. **No page transitions** (hard cuts
 
 ---
 
-## Editorial workflow (no CMS)
+## Editorial workflow
 
-1. Write entry in `src/content/journal/[slug].mdx`.
-2. Upload images to Cloudflare Images, paste IDs into frontmatter. Video → Stream, paste UID.
+1. Write entry in `src/content/journal/[slug].mdx` — by hand, or in the Sveltia CMS at `/admin` (git-based; it commits the same MDX/JSON you would write by hand).
+2. Upload images to Cloudflare Images (`pnpm cf-upload` prints ready-to-paste gallery rows), paste IDs into frontmatter. Video → Stream, paste UID.
 3. `pnpm run dev` to preview. `git commit`, push branch.
-4. `pnpm run deploy` to build and deploy to Cloudflare Workers via Wrangler.
+4. Deploy is automatic: a GitHub Action runs `astro build && wrangler deploy` on every push to `main`. `pnpm run deploy` still works for manual deploys.
 
-Markdown in, site out. Do not add an admin UI.
+Markdown in, site out. No API CMS, no database, no server-side rendering.
 
 ---
 

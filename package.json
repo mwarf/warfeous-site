@@ -11,6 +11,7 @@
     "preview": "astro preview",
     "deploy": "astro build && wrangler deploy",
     "cf-preview": "astro build && wrangler dev",
+    "cf-upload": "node scripts/cf-upload.mjs",
     "astro": "astro"
   },
   "dependencies": {

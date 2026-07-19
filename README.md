@@ -1,6 +1,6 @@
 # warfeous.com
 
-The personal editorial journal of Michael Warf. Essays, notes, and photo essays from Southern Alberta. Astro, Cloudflare Workers, no CMS. Markdown in, site out.
+The personal editorial journal of Michael Warf. Essays, notes, and photo essays from Southern Alberta. Astro, Cloudflare Workers, git-based CMS. Markdown in, site out.
 
 This README is the operator's manual: how to publish, deploy, and maintain the site. The design and build contract lives in [CLAUDE.md](CLAUDE.md); when the two disagree, CLAUDE.md wins.
 
@@ -15,22 +15,33 @@ pnpm install          # dependencies
 pnpm wrangler login   # authenticate wrangler with Cloudflare (once per machine)
 ```
 
-Optional, for Cloudflare Images delivery: create a `.env` file at the repo root with the account hash from the Cloudflare Images dashboard.
+Environment variables go in a `.env` file at the repo root (gitignored; see [.env.example](.env.example)):
 
 ```
-PUBLIC_CF_IMAGES_HASH=<account hash>
+PUBLIC_CF_IMAGES_HASH=<account hash>    # build: turns Image IDs into imagedelivery.net URLs
+CLOUDFLARE_ACCOUNT_ID=<account id>      # cf-upload script only
+CLOUDFLARE_IMAGES_TOKEN=<api token>     # cf-upload script only, Cloudflare Images:Edit
 ```
 
-Without it, image `src` values that look like paths (`/images/foo.jpg`) pass through unchanged and Image IDs fall back to raw strings.
+Without `PUBLIC_CF_IMAGES_HASH`, image `src` values that look like paths (`/images/foo.jpg`) pass through unchanged and Image IDs fall back to raw strings. The other two are secrets used only by the upload script; never expose them to the site.
+
+Two more one-time steps live outside the repo:
+
+- **GitHub Actions secrets** for auto-deploy (see Deploying): `CLOUDFLARE_API_TOKEN` (a token with Workers Scripts:Edit) and `CLOUDFLARE_ACCOUNT_ID` under Settings → Secrets, plus `PUBLIC_CF_IMAGES_HASH` as a repository variable.
+- **CMS login**: open `https://warfeous.com/admin`, choose "Sign In with Token", and paste a fine-grained GitHub personal access token with `contents: write` on `mwarf/warfeous-site`. It lives in the browser's localStorage.
 
 ---
 
 ## Publishing an entry
 
+By hand, or in the CMS at `/admin` (Sveltia CMS; [public/admin/config.yml](public/admin/config.yml) mirrors the schema in [src/content.config.ts](src/content.config.ts) and commits straight to `main`).
+
 1. Create `src/content/journal/<slug>.mdx`. The filename is the URL: `/journal/<slug>`.
 2. Write frontmatter, then the body in Markdown.
 3. Preview with `pnpm dev` (http://localhost:4321).
-4. Commit, then `pnpm run deploy`.
+4. Commit and push — the GitHub Action deploys (see Deploying). `pnpm run deploy` skips the wait.
+
+One CMS caveat: the rich text body editor is fine for plain Markdown, but entries with footnotes (`[^1]`) or pull quotes (`<blockquote class="w-pullquote">`) are safer finished by hand — WYSIWYG editors can mangle raw HTML and footnote syntax on save.
 
 ### Frontmatter reference
 
@@ -97,11 +108,11 @@ Reference it from the entry with `gallery: columbia-icefields`. The first image 
 
 ### Images
 
-1. Upload stills to **Cloudflare Images** (dashboard or API).
-2. Copy each Image ID into the gallery JSON `src` (or `hero.src`).
+1. Run `pnpm cf-upload <file> [file...]`. It uploads each still to **Cloudflare Images** and prints ready-to-paste gallery rows — Image ID plus real pixel dimensions. (Needs `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_IMAGES_TOKEN` in `.env`; see setup.)
+2. Paste the rows into the gallery JSON `images` list (or just the `src` value into `hero.src`), then fill in `alt` and `caption`.
 3. Make sure `PUBLIC_CF_IMAGES_HASH` is set in `.env` (see setup), then build.
 
-`Img.astro` turns an ID into responsive `imagedelivery.net` URLs with `srcset`. Anything starting with `/` or `http` passes through untouched, which is why the seeded galleries still point at `/images/*.jpg` placeholders. Video goes to Cloudflare Stream and the UID into `video.streamId` (the player component is not built yet; poster-first playback is specced in CLAUDE.md).
+`Img.astro` turns an ID into responsive `imagedelivery.net` URLs with `srcset`. Anything starting with `/` or `http` passes through untouched. Video goes to Cloudflare Stream and the UID into `video.streamId` (the player component is not built yet; poster-first playback is specced in CLAUDE.md).
 
 ### The /now page
 
@@ -111,11 +122,15 @@ Edit the `log` array at the top of [src/pages/now.astro](src/pages/now.astro) an
 
 ## Deploying
 
+Deploys are automatic: [.github/workflows/deploy.yml](.github/workflows/deploy.yml) runs `astro build && wrangler deploy` on every push to `main` — including commits from the CMS. It needs two repository secrets (`CLOUDFLARE_API_TOKEN` with Workers Scripts:Edit, and `CLOUDFLARE_ACCOUNT_ID`) and one repository variable (`PUBLIC_CF_IMAGES_HASH`).
+
+Manual deploys still work:
+
 ```sh
 pnpm run deploy
 ```
 
-That runs `astro build` and `wrangler deploy`. The build writes static files to `dist/`, and wrangler uploads them as an assets-only Worker (config in [wrangler.jsonc](wrangler.jsonc)). Only changed files upload, so deploys take seconds.
+Either way, the build writes static files to `dist/`, and wrangler uploads them as an assets-only Worker (config in [wrangler.jsonc](wrangler.jsonc)). Only changed files upload, so deploys take seconds.
 
 After a deploy, spot-check:
 
@@ -124,16 +139,7 @@ After a deploy, spot-check:
 - `/rss.xml` includes the entry;
 - the OG image exists: `/og/<slug>.png`.
 
-Currently live at **https://warfeous-site.devbox-31b.workers.dev**.
-
-### Domain cutover (pending)
-
-warfeous.com still points at the old Vercel site. DNS is already on Cloudflare. When ready:
-
-1. In the Cloudflare dashboard, add `warfeous.com` as a **custom domain** on the `warfeous-site` Worker (this replaces the existing DNS record pointing at Vercel).
-2. Add a redirect from `www.warfeous.com` to the apex (a Redirect Rule on the zone), and remove the current apex-to-www redirect.
-3. Retire the Vercel project.
-4. Verify canonicals: every page already declares `https://warfeous.com/...` as canonical, so nothing in the repo changes.
+Currently live at **https://warfeous.com**. The Vercel site is retired; DNS is fully on Cloudflare. `warfeous.com`, `michaelwarf.com`, and both `www` subdomains resolve to the site — all four are custom domains on the Worker (see [wrangler.jsonc](wrangler.jsonc)). Canonical URLs everywhere point at the `warfeous.com` apex.
 
 ### Local preview of the production build
 
@@ -199,6 +205,9 @@ The JS find should come back empty; the only scripts on the site are three small
 | Build fails on `.node` file / "Unexpected character" | `@resvg/resvg-js` is being bundled. Restore it in `vite.ssr.external` and keep the `createRequire` import in the OG endpoint. |
 | Fonts 404 after touching them | Filenames in `public/fonts/` must match both the `@font-face` rules in [src/styles/colors_and_type.css](src/styles/colors_and_type.css) and the two preload links in [src/layouts/BaseLayout.astro](src/layouts/BaseLayout.astro). |
 | Entry missing from the site | `draft: true`, or the file isn't `.mdx`/`.md`, or frontmatter fails the schema in [src/content.config.ts](src/content.config.ts). The build error names the field. |
+| CMS login fails or saves are rejected | The fine-grained PAT needs `contents: write` with repository access set to `mwarf/warfeous-site`. Mint a new one from the link on the CMS login screen. |
+| CMS saved but the site didn't change | Check GitHub → Actions for a red run; the build error names the failing field. The CMS config mirrors [src/content.config.ts](src/content.config.ts), so a mismatch means one of them drifted. |
+| Deploy fails only in the Action | Missing or wrong repository secrets: `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID`. |
 
 ---
 
@@ -214,8 +223,11 @@ src/layouts/BaseLayout.astro   <head>, metadata, font preloads, read-state scrip
 src/lib/                   date/formatting utils, Cloudflare Images URL helpers
 src/styles/                colors_and_type.css (design tokens) + kit.css (components)
 src/assets/og/             static font instances for OG card generation
+public/admin/              Sveltia CMS (index.html + config.yml), served at /admin
 public/fonts/              subset woff2 files actually served
 scripts/subset-fonts.py    font re-subsetting procedure
+scripts/cf-upload.mjs      upload stills to Cloudflare Images, print gallery rows
+.github/workflows/deploy.yml   auto-deploy on push to main
 wrangler.jsonc             Workers deploy config (assets-only)
 CLAUDE.md                  design system + build contract
 ```

@@ -1,0 +1,169 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+# Sveltia CMS configuration for warfeous.com. Git-based: every save commits to
+# mwarf/warfeous-site on main, and the GitHub Action deploys from there.
+# Field-for-field mirror of the zod schemas in src/content.config.ts — if the
+# schema changes, change this file too. This file is public; never put secrets in it.
+
+backend:
+  name: github
+  repo: mwarf/warfeous-site
+  branch: main
+  # Solo editor: sign in with a fine-grained GitHub personal access token
+  # (contents: write on mwarf/warfeous-site). No OAuth server needed.
+  auth_methods: [token]
+
+site_url: https://warfeous.com
+display_url: https://warfeous.com
+app_title: warfeous
+logo:
+  src: /wordmark.svg
+  show_in_header: true
+
+# Leave optional fields out of frontmatter/JSON when empty, matching the
+# .optional()/.default() fields in src/content.config.ts.
+output:
+  omit_empty_optional_fields: true
+
+# Filenames are URLs: keep them plain ASCII slugs.
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: '-'
+
+collections:
+  - name: journal
+    label: Journal
+    folder: src/content/journal
+    extension: mdx
+    fields:
+      - name: title
+        label: Title
+        widget: string
+        hint: Under ~50 characters; the display scale wraps badly past ~55.
+      - name: type
+        label: Type
+        widget: select
+        default: essay
+        options:
+          - { label: Essay, value: essay }
+          - { label: Note, value: note }
+          - { label: Photo essay, value: photo-essay }
+      - name: publishedAt
+        label: Published
+        widget: datetime
+        type: date
+        picker_utc: true
+        default: '{{now}}'
+      - name: updatedAt
+        label: Updated
+        widget: datetime
+        type: date
+        picker_utc: true
+        required: false
+      - name: excerpt
+        label: Excerpt
+        widget: text
+        required: false
+        hint: One or two sentences. Shown in lists, feeds, and as the lead paragraph.
+      - name: location
+        label: Location
+        widget: string
+        required: false
+      - name: tags
+        label: Tags
+        widget: list
+        required: false
+      - name: hero
+        label: Hero image
+        widget: object
+        required: false
+        hint: Essays only. The src is a Cloudflare Image ID (see `pnpm cf-upload`).
+        fields:
+          - { name: src, label: Cloudflare Image ID, widget: string }
+          - { name: alt, label: Alt text, widget: string }
+          - { name: caption, label: Caption, widget: string, required: false }
+      - name: video
+        label: Video
+        widget: object
+        required: false
+        hint: Cloudflare Stream. The player component is not built yet.
+        fields:
+          - { name: streamId, label: Stream UID, widget: string }
+          - { name: poster, label: Poster Image ID, widget: string }
+          - { name: caption, label: Caption, widget: string, required: false }
+      - name: gallery
+        label: Gallery
+        widget: relation
+        collection: galleries
+        value_field: '{{slug}}'
+        display_fields: [title]
+        search_fields: [title]
+        required: false
+        hint: Photo essays only. References a gallery by its slug.
+      - name: draft
+        label: Draft
+        widget: boolean
+        default: false
+        required: false
+        hint: Drafts stay off the site entirely.
+      - name: dropcap
+        label: Drop cap
+        widget: boolean
+        default: true
+        required: false
+        hint: Essays only. Turn off when the opening sentence is under ~10 words.
+      - name: canonicalUrl
+        label: Canonical URL
+        widget: string
+        type: url
+        required: false
+        hint: Only when cross-posting.
+      - name: body
+        label: Body
+        widget: richtext
+
+  - name: galleries
+    label: Galleries
+    folder: src/content/galleries
+    format: json
+    identifier_field: slug
+    fields:
+      - name: slug
+        label: Slug
+        widget: string
+        pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', 'Lowercase letters, numbers, and hyphens only.']
+        hint: Becomes the filename. Photo essays reference this slug.
+      - name: title
+        label: Title
+        widget: string
+      - name: date
+        label: Date
+        widget: datetime
+        type: date
+        picker_utc: true
+        default: '{{now}}'
+      - name: location
+        label: Location
+        widget: string
+        required: false
+      - name: images
+        label: Images
+        widget: list
+        label_singular: Image
+        summary: '{{fields.caption}}'
+        hint: Run `pnpm cf-upload <file>` to upload and get a ready-to-paste row.
+        fields:
+          - name: src
+            label: Cloudflare Image ID
+            widget: string
+          - name: alt
+            label: Alt text
+            widget: string
+          - name: caption
+            label: Caption
+            widget: string
+            required: false
+            hint: Primary text on photo essays, not decoration.
+          - { name: width, label: Width, widget: number, value_type: int }
+          - { name: height, label: Height, widget: number, value_type: int }
