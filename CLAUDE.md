@@ -6,7 +6,7 @@
 
 ## What this is
 
-**warfeous.com** is the personal editorial journal of Michael Warf — documentary filmmaker and photographer in Pincher Creek, Southern Alberta. Long-form essays, short notes, and photo essays. It is the canonical home for his writing; LinkedIn is a distribution channel, not the source of record.
+**warfeous.com** is the personal editorial journal of Michael Warf — documentary filmmaker and photographer in Lethbridge, Southern Alberta. Long-form essays, short notes, and photo essays. It is the canonical home for his writing; LinkedIn is a distribution channel, not the source of record.
 
 It is **not** the studio site (that's coalbanks.com). It is not a marketplace, not a membership product, has no comments, no newsletter in v1.
 
@@ -169,7 +169,7 @@ Build these as `.astro` components. **High-fidelity visual recreations already e
 | `Masthead.astro` | kit `Masthead` | Wordmark + nav + tagline. **In document flow, NOT sticky.** Nav: hairline underline animates in on hover; active link shows slate underline. |
 | `Footer.astro` | kit `Footer` | Single-line bio + mono links (rss / now / colophon). Appears once, at the bottom. |
 | `EntryRow.astro` | kit `EntryRow` | Journal index row. No fill/border/shadow/radius. On hover: 2px slate bar slides in on the left edge + frost-deep bg. Uniform text rows — **no inline thumbnails.** |
-| `EntryMeta.astro` | kit `EntryMeta` | `ESSAY · 12 MIN · 24 MAY 2026 · PINCHER CREEK`. Mono, uppercase, sage `·` separators. Read-dot when read (see Interactions). |
+| `EntryMeta.astro` | kit `EntryMeta` | `ESSAY · 12 MIN · 24 MAY 2026 · LETHBRIDGE`. Mono, uppercase, sage `·` separators. Read-dot when read (see Interactions). |
 | `Img.astro` | — | Wrapper around Cloudflare Images: takes an Image ID, emits responsive `<img>` with `srcset`/`sizes`. Grain overlay on hero/figure images only, ~10% opacity. |
 | `StreamVideo.astro` | kit video-poster card | Poster is LCP. Tap-to-play. Autoplay ONLY when muted + in viewport + `prefers-reduced-motion: no-preference` + not `Save-Data`. Mobile: poster only by default. |
 | `Gallery.astro` | kit `PhotoEssayEntry` + `Lightbox` | Image-led layout; lightbox on click (see Interactions). |

@@ -27,16 +27,20 @@ const tiles = await Promise.all(
   <div class="w-page w-page--photo">
     <h1 class="w-pagetitle">Photographs</h1>
 
-    <div class="w-pgrid w-pgrid--photographs">
-      {tiles.map(({ entry, image }) => (
-        <PhotoTile
-          slug={entry.id}
-          title={entry.data.title}
-          publishedAt={entry.data.publishedAt}
-          location={entry.data.location}
-          image={image}
-        />
-      ))}
-    </div>
+    {tiles.length > 0 ? (
+      <div class="w-pgrid w-pgrid--photographs">
+        {tiles.map(({ entry, image }) => (
+          <PhotoTile
+            slug={entry.id}
+            title={entry.data.title}
+            publishedAt={entry.data.publishedAt}
+            location={entry.data.location}
+            image={image}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="w-prose">Nothing here yet. The photo essays go up once I've readied the images. The writing lives in the <a href="/journal">journal</a>.</p>
+    )}
   </div>
 </BaseLayout>

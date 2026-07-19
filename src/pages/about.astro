@@ -12,15 +12,8 @@ import Footer from '../components/Footer.astro';
     <h1 class="w-pagetitle w-about__title">Michael Warf</h1>
 
     <p class="w-about__lede">
-      Documentary filmmaker and photographer based in Pincher Creek, on Treaty 7 territory in Southern Alberta, within a half-day's drive of the Crowsnest Pass.
+      Documentary filmmaker and photographer in Lethbridge, on the Oldman River in Treaty 7 territory, Southern Alberta.
     </p>
-
-    <figure class="w-about__portrait">
-      <div class="w-about__portrait-ph"></div>
-      <figcaption>
-        Pincher Creek, March 2026. Self-portrait on the ranch road.
-      </figcaption>
-    </figure>
 
     <p class="w-prose">
       I make non-fiction work for clients in agriculture, conservation, and regional tourism. The studio is <a href="https://coalbanks.com">Coalbanks Creative</a>. The journal is where the unfinished thinking lives: notes from the cut, photo essays from the field, longer pieces when something earns the length.
@@ -45,27 +38,5 @@ import Footer from '../components/Footer.astro';
     max-width: 52ch;
     text-wrap: pretty;
   }
-  .w-about__portrait {
-    margin: 0 0 24px 32px;
-    float: right;
-    width: 42%;
-  }
-  .w-about__portrait-ph {
-    aspect-ratio: 4 / 5;
-    background: var(--w-frost-deep);
-  }
-  .w-about__portrait figcaption {
-    font-family: var(--w-font-mono);
-    font-size: 12px;
-    letter-spacing: 0.015em;
-    color: var(--w-muted);
-    margin-top: 10px;
-    line-height: 1.45;
-  }
   .w-about .w-prose { margin: 0 0 1.15em; }
-  .w-about::after {
-    content: "";
-    display: block;
-    clear: both;
-  }
 </style>
