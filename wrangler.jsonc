@@ -7,7 +7,9 @@
 	],
 	"routes": [
 		{ "pattern": "warfeous.com", "custom_domain": true },
-		{ "pattern": "www.warfeous.com", "custom_domain": true }
+		{ "pattern": "www.warfeous.com", "custom_domain": true },
+		{ "pattern": "michaelwarf.com", "custom_domain": true },
+		{ "pattern": "www.michaelwarf.com", "custom_domain": true }
 	],
 	"assets": {
 		"directory": "./dist",
