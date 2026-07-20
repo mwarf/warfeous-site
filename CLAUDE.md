@@ -19,7 +19,7 @@ It is **not** the studio site (that's coalbanks.com). It is not a marketplace, n
 - **Astro** (latest stable), MDX integration. Astro components only — no React/Vue/Svelte unless a specific island genuinely demands it (the lightbox is the one likely candidate; see Interactions).
 - **Content Collections** with zod schemas (see Content model).
 - **Sveltia CMS** at `/admin` — a static SPA in `public/admin/`, git-based, commits straight to the repo. Not part of the Astro build; adds zero JS to reader-facing pages.
-- **Cloudflare Workers** via Wrangler (`pnpm run deploy`). Static output served from Workers with KV session binding.
+- **Cloudflare Workers** via Wrangler — the GitHub Action in `.github/workflows/deploy.yml` builds and deploys on push to `main`; `pnpm run deploy` does the same by hand. Static output served from Workers with KV session binding.
 - **Cloudflare Images** — all editorial stills, referenced by Image ID in frontmatter.
 - **Cloudflare Stream** — all video, HLS, referenced by Stream UID.
 - **Cloudflare Web Analytics** — cookieless, no banner. No GA4, no third-party scripts.

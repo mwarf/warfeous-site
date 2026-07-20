@@ -27,7 +27,7 @@ Without `PUBLIC_CF_IMAGES_HASH`, image `src` values that look like paths (`/imag
 
 Two more one-time steps live outside the repo:
 
-- **GitHub Actions secrets** for auto-deploy (see Deploying): `CLOUDFLARE_API_TOKEN` (a token with Workers Scripts:Edit) and `CLOUDFLARE_ACCOUNT_ID` under Settings → Secrets, plus `PUBLIC_CF_IMAGES_HASH` as a repository variable.
+- **GitHub Actions secrets** for auto-deploy (see Deploying): `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` under Settings → Secrets, plus `PUBLIC_CF_IMAGES_HASH` as a repository variable. The API token needs two permission rows: **Account → Workers Scripts:Edit** and **Zone → Workers Routes:Edit** on `warfeous.com` and `michaelwarf.com`. The "Edit Cloudflare Workers" template only grants the account-level one — wrangler reconciles the custom-domain routes on every deploy, and that's a zone-level API call.
 - **CMS login**: open `https://warfeous.com/admin`, choose "Sign In with Token", and paste a fine-grained GitHub personal access token with `contents: write` on `mwarf/warfeous-site`. It lives in the browser's localStorage.
 
 ---
@@ -122,7 +122,7 @@ Edit the `log` array at the top of [src/pages/now.astro](src/pages/now.astro) an
 
 ## Deploying
 
-Deploys are automatic: [.github/workflows/deploy.yml](.github/workflows/deploy.yml) runs `astro build && wrangler deploy` on every push to `main` — including commits from the CMS. It needs two repository secrets (`CLOUDFLARE_API_TOKEN` with Workers Scripts:Edit, and `CLOUDFLARE_ACCOUNT_ID`) and one repository variable (`PUBLIC_CF_IMAGES_HASH`).
+Deploys are automatic: [.github/workflows/deploy.yml](.github/workflows/deploy.yml) runs `astro build && wrangler deploy` on every push to `main` — including commits from the CMS. It needs two repository secrets (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`) and one repository variable (`PUBLIC_CF_IMAGES_HASH`). The token's permissions are Account → Workers Scripts:Edit plus Zone → Workers Routes:Edit on both zones (see the troubleshooting table for why).
 
 Manual deploys still work:
 
@@ -208,6 +208,8 @@ The JS find should come back empty; the only scripts on the site are three small
 | CMS login fails or saves are rejected | The fine-grained PAT needs `contents: write` with repository access set to `mwarf/warfeous-site`. Mint a new one from the link on the CMS login screen. |
 | CMS saved but the site didn't change | Check GitHub → Actions for a red run; the build error names the failing field. The CMS config mirrors [src/content.config.ts](src/content.config.ts), so a mismatch means one of them drifted. |
 | Deploy fails only in the Action | Missing or wrong repository secrets: `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID`. |
+| Deploy fails: `Authentication error [code: 10000]` on `/zones/.../workers/routes` | The API token lacks zone permissions — builds and uploads succeed, but route reconciliation fails. Add Zone → Workers Routes:Edit for both zones. Editing a token keeps its value, so the secret doesn't need updating. |
+| CMS error screen: "The media folder is not defined" | Sveltia's validator requires `media_folder` even though CMS uploads go unused (the docs claim omitting it disables media storage; the shipped code disagrees). It's defined as `/public/images` in [public/admin/config.yml](public/admin/config.yml) — don't remove it. |
 
 ---
 
