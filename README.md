@@ -34,7 +34,7 @@ Two more one-time steps live outside the repo:
 
 ## Publishing an entry
 
-By hand, or in the CMS at `/admin` (Sveltia CMS; [public/admin/config.yml](public/admin/config.yml) mirrors the schema in [src/content.config.ts](src/content.config.ts) and commits straight to `main`).
+By hand, in the CMS at `/admin` (Sveltia CMS; [public/admin/config.yml](public/admin/config.yml) mirrors the schema in [src/content.config.ts](src/content.config.ts) and commits straight to `main`), or by asking Claude Code — the `/publish` skill in [.claude/skills/publish/](.claude/skills/publish/SKILL.md) runs the whole pipeline: house-rule validation, build, commit, deploy, and live verification.
 
 1. Create `src/content/journal/<slug>.mdx`. The filename is the URL: `/journal/<slug>`.
 2. Write frontmatter, then the body in Markdown.
