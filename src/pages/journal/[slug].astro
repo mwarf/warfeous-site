@@ -11,7 +11,7 @@ import { getCollection, getEntry, render } from 'astro:content';
 import { formatDate, readingTime } from '../../lib/utils';
 
 export async function getStaticPaths() {
-  const entries = await getCollection('journal', ({ data }) => !data.draft);
+  const entries = await getCollection('journal', ({ data }) => import.meta.env.DEV || !data.draft);
   const sorted = entries.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 
   return sorted.map((entry, i) => ({

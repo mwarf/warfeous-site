@@ -25,7 +25,7 @@ const lightboxImages = images.map(img => ({
 ---
 <div class="w-gallery">
   {images.map((img, i) => (
-    <figure class:list={['w-pe__fig', { full: i % 3 === 1 }]}>
+    <figure class:list={['w-pe__fig', { full: img.width > img.height }]}>
       <button
         class="w-pe__photo-btn"
         data-lightbox-index={i}
@@ -36,7 +36,7 @@ const lightboxImages = images.map(img => ({
           alt={img.alt}
           width={img.width}
           height={img.height}
-          sizes={i % 3 === 1 ? '100vw' : '(min-width: 1120px) 1080px, 100vw'}
+          sizes={img.width > img.height ? '100vw' : '(min-width: 1120px) 1080px, 100vw'}
           loading={i === 0 ? 'eager' : 'lazy'}
           fetchpriority={i === 0 ? 'high' : undefined}
         />
