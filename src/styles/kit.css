@@ -425,7 +425,8 @@ html, body { margin: 0; padding: 0; background: var(--w-bg); }
 }
 .w-pe__fig img, .w-pe__fig .ph {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
   background: var(--w-parchment-deep);
   position: relative;
@@ -554,6 +555,8 @@ html, body { margin: 0; padding: 0; background: var(--w-bg); }
 .w-pe__photo-btn {
   display: block;
   width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
   padding: 0;
   background: transparent;
   border: 0;
